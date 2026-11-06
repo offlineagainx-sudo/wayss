@@ -144,3 +144,5 @@
 @media(max-width:600px){.qc-root.qc-center{left:50%!important;right:auto!important}}
 
 .mobile-nav{display:none!important}
+
+.qc-root.qc-classic~.qc-create{left:50%;transform:translateX(-50%)}
