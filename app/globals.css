@@ -73,3 +73,5 @@
 
 .profile-inline-link{display:grid;gap:4px;text-align:left;border:0;background:transparent;color:inherit;padding:0;cursor:pointer}.profile-inline-link:hover b,.flux-author-link:hover{text-decoration:underline}.flux-author-link{display:inline-flex;border:0;background:transparent;color:#fff;font-size:13px;font-weight:700;padding:0;text-shadow:0 2px 10px #000}.dm-back{display:none}
 @media(max-width:650px){.dm-back{display:grid}}
+
+.profile-post-filters{margin:14px 0}.profile-flux-video{width:100%;max-height:520px;aspect-ratio:9/16;object-fit:contain;background:#050608;border-radius:12px}.profile-post-filters button{padding:8px 14px}
