@@ -58,3 +58,5 @@
 .flux-comment-tools{display:flex;gap:14px;margin-top:5px}.flux-comment-tools button{border:0;background:none;color:#9296A3;padding:2px 0;font-size:10px}.flux-comment-tools button:hover{color:#F5F5F7}
 .flux-replying{display:flex;justify-content:space-between;align-items:center;margin:4px 0 8px;padding:8px 10px;background:#24121c;border:1px solid #643047;border-radius:9px;color:#f2a2b5;font-size:11px}
 .flux-replying button{border:0;background:none;color:#fff;font-size:11px}
+
+.flux-own-comment-tools{display:flex;align-items:center;gap:7px}.flux-own-comment-tools .icon-btn{font-size:10px;padding:2px}
