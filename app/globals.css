@@ -142,3 +142,5 @@
 
 .content-grid{grid-template-columns:minmax(0,760px);justify-content:center}.right-column{display:none}
 @media(max-width:600px){.qc-root.qc-center{left:50%!important;right:auto!important}}
+
+.mobile-nav{display:none!important}
