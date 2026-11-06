@@ -39,3 +39,6 @@
 .auth-extras{display:flex;justify-content:space-between;gap:10px;margin:12px 0}.auth-extras button{border:0;background:none;color:#55AAFF;font-size:11px}.terms-row{display:flex;align-items:center;gap:8px;color:#9296A3;font-size:11px;margin:10px 0}.terms-row input{accent-color:#F32950}
 
 .message-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.message-actions button{border:1px solid #ffffff1a;background:#0003;color:#ddd;border-radius:8px;padding:4px 7px;font-size:10px}.reply-preview{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#24121c;border:1px solid #643047;border-radius:10px;font-size:11px}.reply-preview button{border:0;background:none;color:#fff}
+
+.home-shell,.messages-shell{padding-left:28px}
+@media(max-width:650px){.home-shell,.messages-shell{padding-left:12px}}
