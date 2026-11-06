@@ -44,7 +44,7 @@ export default function MessagesPage(){
  const title=active?.kind==='group'?active.group_name||'Group chat':peer?.display_name||peer?.username||'Conversation';
  return <main className="app-shell messages-shell dm-app"><header className="topbar"><button className="icon-btn" onClick={()=>router.push('/')}><ArrowLeft/></button><b>WAYSS Messages</b><span className="dm-top-caption">Private conversations, live</span></header>
  <div className="dm-layout">
- <aside className={'panel dm-sidebar '+(cid?'dm-mobile-hide':'')}><div className="dm-sidebar-head"><div><span className="eyebrow">YOUR INBOX</span><h2>Messages</h2></div><button className="primary dm-new" onClick={()=>{GM(x=>!x);Q('')}}><Plus size={16}/> New</button></div>
+ <aside className={'panel dm-sidebar '+(cid?'dm-mobile-hide':'')}><div className="dm-sidebar-head"><div><span className="eyebrow">YOUR INBOX</span><h2>Messages</h2></div><button className="primary dm-new" onClick={()=>{GM(true);Q('')}}><Plus size={16}/> New group</button></div>
  <div className="search-wrap dm-search"><Search size={16}/><input placeholder="Search people by exact username" value={query} onChange={e=>Q(e.target.value)}/></div>
  {matches.length>0&&<div className="dm-search-results">{matches.map(p=><button key={p.id} onClick={()=>start(p)}><Avatar person={p}/><span><b>{p.display_name||p.username}</b><small>@{p.username}</small></span>{groupMode&&selected.some(x=>x.id===p.id)?<Check/>:<Plus size={15}/>}</button>)}</div>}
  {groupMode&&<div className="group-create"><input placeholder="Group name" value={groupName} onChange={e=>GN(e.target.value)}/><small>{selected.length} members selected</small><button className="primary" disabled={busy||selected.length<2} onClick={createGroup}>Create group</button></div>}
