@@ -35,3 +35,5 @@
 .saved-post-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid #262832;font-size:11px}.saved-post-row small{color:#9296A3}
 .group-create{display:grid;gap:8px;margin:10px 0;padding:12px;background:#101116;border:1px solid #262832;border-radius:12px}.group-create input{background:#08090D;border:1px solid #262832;border-radius:8px;padding:10px}.inbox-list{max-height:45vh;overflow:auto}.inbox-list .notification-row{cursor:pointer}
 @media(max-width:650px){.public-post-grid{grid-template-columns:1fr}.profile-action-row>*{flex:1}}
+
+.auth-extras{display:flex;justify-content:space-between;gap:10px;margin:12px 0}.auth-extras button{border:0;background:none;color:#55AAFF;font-size:11px}.terms-row{display:flex;align-items:center;gap:8px;color:#9296A3;font-size:11px;margin:10px 0}.terms-row input{accent-color:#F32950}
