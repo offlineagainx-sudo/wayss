@@ -20,6 +20,8 @@ create or replace function public.review_verification(request_id uuid,decision t
 grant execute on function public.review_verification(uuid,text) to authenticated;
 alter table public.profiles enable row level security; alter table public.blocks enable row level security; alter table public.follows enable row level security; alter table public.posts enable row level security; alter table public.likes enable row level security; alter table public.comments enable row level security; alter table public.conversation_members enable row level security; alter table public.conversations enable row level security; alter table public.messages enable row level security; alter table public.notifications enable row level security; alter table public.verification_requests enable row level security;
 create policy "profile lookup" on public.profiles for select to authenticated using(id=auth.uid() or (not is_private and not exists(select 1 from public.blocks b where (b.blocker_id=auth.uid() and b.blocked_id=id) or (b.blocker_id=id and b.blocked_id=auth.uid()))));
+revoke update on public.profiles from authenticated;
+grant update(display_name,bio,avatar_url,cover_url,is_private) on public.profiles to authenticated;
 create policy "edit own profile" on public.profiles for update to authenticated using(id=auth.uid()) with check(id=auth.uid());
 create policy "own blocks read" on public.blocks for select to authenticated using(blocker_id=auth.uid());
 create policy "own blocks add" on public.blocks for insert to authenticated with check(blocker_id=auth.uid());
