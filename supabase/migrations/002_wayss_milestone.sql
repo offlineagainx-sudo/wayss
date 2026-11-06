@@ -123,3 +123,71 @@ begin
     alter publication supabase_realtime add table public.notifications;
   end if;
 end $$;
+
+
+-- Allow authenticated viewers to read media only when its owning post/chat is visible to them.
+drop policy if exists "WAYSS read own media" on storage.objects;
+create policy "WAYSS read visible media" on storage.objects for select to authenticated
+using (
+  bucket_id='wayss-media' and (
+    (storage.foldername(name))[1]=auth.uid()::text
+    or exists (
+      select 1 from public.posts p
+      join public.profiles owner on owner.id=p.user_id
+      where p.media_url=name
+        and not exists(select 1 from public.blocks b where
+          (b.blocker_id=auth.uid() and b.blocked_id=p.user_id) or
+          (b.blocker_id=p.user_id and b.blocked_id=auth.uid()))
+        and (
+          p.user_id=auth.uid()
+          or (p.visibility='public' and not owner.is_private)
+          or exists(select 1 from public.follows f where f.follower_id=auth.uid() and f.following_id=p.user_id and f.status='accepted')
+        )
+    )
+    or exists (
+      select 1 from public.messages m
+      where m.media_url=name and public.is_conversation_member(m.conversation_id)
+    )
+  )
+);
+
+-- Notifications are generated from actual database events, never fabricated by the client.
+create or replace function public.wayss_notify_event()
+returns trigger language plpgsql security definer set search_path=''
+as $$
+declare recipient uuid; actor uuid; kind_value text; entity uuid;
+begin
+  actor := auth.uid();
+  if tg_table_name='likes' then
+    select user_id into recipient from public.posts where id=new.post_id;
+    kind_value := 'liked your post'; entity := new.post_id;
+  elsif tg_table_name='follows' then
+    recipient := new.following_id; kind_value := case when new.status='pending' then 'requested to follow you' else 'started following you' end; entity := new.following_id;
+  elsif tg_table_name='comments' then
+    select user_id into recipient from public.posts where id=new.post_id;
+    kind_value := 'commented on your post'; entity := new.post_id;
+  elsif tg_table_name='messages' then
+    select cm.user_id into recipient from public.conversation_members cm
+    where cm.conversation_id=new.conversation_id and cm.user_id<>new.sender_id limit 1;
+    actor := new.sender_id; kind_value := 'sent you a message'; entity := new.conversation_id;
+  end if;
+  if recipient is not null and actor is not null and recipient<>actor then
+    insert into public.notifications(recipient_id,actor_id,kind,entity_id)
+    values(recipient,actor,kind_value,entity);
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists wayss_like_notification on public.likes;
+create trigger wayss_like_notification after insert on public.likes
+for each row execute function public.wayss_notify_event();
+drop trigger if exists wayss_follow_notification on public.follows;
+create trigger wayss_follow_notification after insert on public.follows
+for each row execute function public.wayss_notify_event();
+drop trigger if exists wayss_comment_notification on public.comments;
+create trigger wayss_comment_notification after insert on public.comments
+for each row execute function public.wayss_notify_event();
+drop trigger if exists wayss_message_notification on public.messages;
+create trigger wayss_message_notification after insert on public.messages
+for each row execute function public.wayss_notify_event();
