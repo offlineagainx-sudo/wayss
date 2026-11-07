@@ -256,3 +256,15 @@
 .story-viewer-media{width:100%;height:100%;object-fit:contain;background:#050609}
 .story-viewer-caption{position:absolute;bottom:20px;left:15px;right:15px;text-align:center;color:white;text-shadow:0 1px 8px #000;font-size:13px}
 .story-delete{position:absolute;bottom:12px;right:12px;display:flex;align-items:center;gap:7px;border:1px solid #ffffff33;border-radius:10px;padding:8px 11px;background:#090a10d9;color:white;font-size:11px}
+
+
+.nearby-event-cover{display:block;width:100%;max-height:190px;object-fit:cover;border-radius:14px;margin:12px 0}
+.nearby-invite-tools{display:grid;gap:10px;margin:18px 0;padding:14px;border:1px solid #262832;border-radius:13px;background:#101116}
+.nearby-invite-tools>div{display:flex;gap:8px}
+.nearby-invite-tools input{min-width:0;flex:1;background:#08090D;border:1px solid #262832;border-radius:9px;padding:10px;color:#fff}
+.nearby-invite-tools button,.nearby-invite-row button{border:1px solid #343744;border-radius:9px;background:#17181f;color:#f5f5f7;padding:8px 11px;font-size:11px}
+.nearby-invite-tools button:hover,.nearby-invite-row button:hover{border-color:#f32950}
+.nearby-invite-row{display:flex;gap:8px;align-items:center}
+.nearby-invite-row>span{flex:1;min-width:0;display:grid;gap:4px}
+.nearby-invite-row small{color:#9296a3;font-size:10px}
+.nearby-event-form input[type=file]{padding:9px;background:#101116;border:1px solid #262832;border-radius:10px;color:#9296a3}
