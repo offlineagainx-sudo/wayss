@@ -284,3 +284,55 @@
 .nearby-place-rating form{display:grid;gap:8px}
 .nearby-place-rating select,.nearby-place-rating input{min-width:0;width:100%;padding:10px;border:1px solid #262832;border-radius:9px;background:#08090d;color:#f5f5f7}
 .nearby-place-rating form button{justify-content:center}
+
+
+/* WAYSS PHANTOM */
+.phantom-mark{font-size:9px;letter-spacing:.24em;color:#f32950;border:1px solid #f3295050;border-radius:8px;padding:7px 9px}
+.phantom-studio,.phantom-challenge{max-width:860px;margin:0 auto;padding:26px 18px 120px}
+.phantom-studio h1,.phantom-challenge h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;margin:8px 0}
+.phantom-studio .settings-card,.phantom-challenge-card,.phantom-actions{padding:20px;margin:16px 0;border:1px solid #262832;background:#101116;border-radius:18px}
+.phantom-studio .settings-card h3,.phantom-actions h3{display:flex;align-items:center;gap:9px;margin:0 0 16px}
+.phantom-studio .settings-card h3 svg,.phantom-actions h3 svg{color:#f32950;width:18px}
+.phantom-studio label,.phantom-challenge label{display:grid;gap:7px;margin:12px 0;color:#d6d8e1;font-size:12px}
+.phantom-studio input:not([type=checkbox]):not([type=file]),.phantom-studio textarea,.phantom-studio select,.phantom-challenge input,.phantom-challenge textarea,.phantom-challenge select,.phantom-request input{width:100%;min-width:0;border:1px solid #2a2d39;border-radius:10px;background:#08090d;color:#f5f5f7;padding:11px;font:inherit}
+.phantom-studio textarea,.phantom-challenge textarea{min-height:76px;resize:vertical}
+.phantom-studio input[type=file]{padding:8px;border:1px solid #2a2d39;border-radius:10px;background:#08090d;color:#9296a3}
+.phantom-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.phantom-stage-list{display:grid;gap:12px;margin:16px 0}
+.phantom-stage{padding:16px;border:1px solid #30323d;background:#14151c;border-radius:14px}
+.phantom-stage-head{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:12px;font-size:11px;letter-spacing:.08em}
+.phantom-stage-head span,.phantom-clue-type{color:#f32950;font-size:9px;letter-spacing:.16em}
+.phantom-stage small{font-size:10px;color:#9296a3}
+.phantom-publish-row{display:flex;gap:10px;margin-top:12px}
+.phantom-publish-row>*{flex:1}
+.phantom-request{padding:13px 0;border-top:1px solid #262832}
+.phantom-request p{font-size:12px;color:#9296a3}
+.phantom-request>div{display:flex;gap:8px}
+.phantom-grant{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #262832}
+.phantom-grant span{display:grid;gap:4px}.phantom-grant small{font-size:10px;color:#9296a3}
+.phantom-shell{min-height:100vh;background:#08090d}
+.phantom-challenge{max-width:720px;text-align:center}
+.phantom-orbit{width:150px;height:150px;margin:18px auto 26px;border-radius:50%;border:1px solid #f3295040;display:grid;place-items:center;position:relative;box-shadow:0 0 60px #f3295010,inset 0 0 40px #f329500c}
+.phantom-orbit:before,.phantom-orbit:after{content:"";position:absolute;inset:13px;border:1px dashed #f3295060;border-radius:50%;animation:phantom-spin 24s linear infinite}
+.phantom-orbit:after{inset:-8px;border-color:#ffffff16;animation-direction:reverse}
+.phantom-orbit-core{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;background:#17181f;color:#f32950;border:1px solid #f3295060}
+.phantom-orbit>span{position:absolute;bottom:-24px;font-size:8px;letter-spacing:.24em;color:#9296a3}
+@keyframes phantom-spin{to{transform:rotate(360deg)}}
+.phantom-challenge-card{text-align:left}
+.phantom-challenge-card h2{font-size:22px;margin:10px 0}
+.phantom-challenge-card h3{font-size:18px;line-height:1.5;margin:18px 0}
+.phantom-stage-head{display:flex;justify-content:space-between;align-items:center;color:#9296a3;font-size:10px;letter-spacing:.14em}
+.phantom-difficulty{padding:5px 8px;border:1px solid #333;border-radius:20px}
+.phantom-difficulty.extreme{color:#f32950;border-color:#f3295070}
+.phantom-progress{height:4px;border-radius:5px;background:#262832;margin:12px 0 18px;overflow:hidden}
+.phantom-progress span{display:block;height:100%;background:#f32950;transition:width .3s}
+.phantom-clue-image{display:block;width:100%;max-height:280px;object-fit:contain;margin:16px 0;border-radius:12px;background:#08090d}
+.phantom-attempts{font-size:10px;color:#9296a3;margin:12px 0}
+.phantom-hints{padding:12px;border-radius:12px;background:#17181f;margin:14px 0}
+.phantom-hints b{display:flex;align-items:center;gap:7px;color:#f5f5f7;font-size:12px}
+.phantom-hints p{font-size:12px;color:#c8cad3}
+.phantom-actions{display:grid;gap:10px;text-align:left}
+.phantom-privacy-note{display:flex;align-items:center;justify-content:center;gap:8px;color:#9296a3;font-size:10px;margin:24px 0}
+.phantom-loading{display:flex;justify-content:center;align-items:center;gap:10px;padding:40px;color:#9296a3}
+.danger-action{color:#f32950!important}
+@media(max-width:600px){.phantom-studio,.phantom-challenge{padding:20px 12px 110px}.phantom-form-grid{grid-template-columns:1fr}.phantom-studio .settings-card,.phantom-challenge-card,.phantom-actions{padding:15px}.phantom-publish-row{flex-direction:column}.phantom-grant{align-items:flex-start;flex-direction:column}}
