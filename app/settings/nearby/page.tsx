@@ -1,0 +1,16 @@
+'use client';
+import {useEffect,useState} from 'react';
+import {useRouter} from 'next/navigation';
+import {supabase} from '@/lib/supabase';
+import QuickCenter from '@/components/QuickCenter';
+import ToggleSwitch from '@/components/ToggleSwitch';
+import {ArrowLeft,MapPin,ShieldCheck,Save,EyeOff} from 'lucide-react';
+const db=supabase();
+export default function NearbyPrivacySettings(){
+ const router=useRouter();const [session,S]=useState<any>(null),[allow,A]=useState(false),[busy,B]=useState(false),[notice,N]=useState('');
+ useEffect(()=>{if(!db)return;db.auth.getSession().then(async({data}:any)=>{S(data.session);if(data.session){const {data:p,error}=await db.from('nearby_preferences').select('allow_on_demand_location').eq('user_id',data.session.user.id).maybeSingle();if(error)N(error.message);else A(!!p?.allow_on_demand_location);}});},[]);
+ async function save(){if(!db||!session)return;B(true);const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,updated_at:new Date().toISOString()});N(error?.message||'Nearby privacy settings saved.');B(false);}
+ if(!db)return <main className="setup">Connect Supabase first.</main>;
+ if(!session)return <main className="setup">Log in to manage Nearby privacy.</main>;
+ return <main className="feature-shell"><header className="feature-top"><button className="icon-btn" onClick={()=>router.push('/settings')}><ArrowLeft/></button><div><b>Nearby privacy</b><small>Your location stays under your control</small></div></header><section className="feature-content settings-content"><p className="eyebrow">LOCATION CONTROL</p><h1>Stay in control.</h1><section className="panel settings-card"><h3><MapPin/> On-demand location</h3><label className="setting-row"><span><b>Allow device location when I tap Nearby</b><small>Off by default. When enabled, WAYSS asks for browser permission only after you press the current-location button. Coordinates are used to find public places and are not saved to your profile or shown to other users.</small></span><ToggleSwitch checked={allow} onChange={A} label="Allow on-demand location"/></label></section><section className="panel settings-card"><h3><EyeOff/> People discovery</h3><div className="nearby-privacy-note"><ShieldCheck/><span><b>Hidden from map-based people discovery</b><small>WAYSS does not place user profiles or live user locations on the Nearby map. To find an account, use Orbit and search by username.</small></span></div></section><section className="panel settings-card"><h3><ShieldCheck/> Privacy promise</h3><ul className="nearby-privacy-list"><li>No background location tracking.</li><li>No public location history.</li><li>No exact coordinates on your profile.</li><li>Your location is never shared with other WAYSS users.</li></ul></section>{notice&&<p className="notice">{notice}</p>}<button className="primary" disabled={busy} onClick={save}><Save size={16}/>{busy?'Saving…':'Save privacy settings'}</button></section><QuickCenter/></main>;
+}
