@@ -1,11 +1,11 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {usePathname,useRouter} from 'next/navigation';
-import {Home,Compass,Plus,MessageCircle,UserRound,ImagePlus,Images,Video} from 'lucide-react';
+import {Home,Compass,Plus,MessageCircle,UserRound,ImagePlus,Images,Video,MapPin} from 'lucide-react';
 type Pref={style:'quick'|'classic';autoCollapse:boolean;delay:number;position:'left'|'center';labels:boolean};
 const KEY='wayss-navigation-v1';
 const defaults:Pref={style:'quick',autoCollapse:true,delay:2.5,position:'left',labels:true};
-const links=[{label:'Home',href:'/',Icon:Home},{label:'Orbit',href:'/orbit',Icon:Compass},{label:'Msgs',href:'/messages',Icon:MessageCircle},{label:'Profile',href:'/profile',Icon:UserRound}];
+const links=[{label:'Home',href:'/',Icon:Home},{label:'Orbit',href:'/orbit',Icon:Compass},{label:'Nearby',href:'/nearby',Icon:MapPin},{label:'Msgs',href:'/messages',Icon:MessageCircle},{label:'Profile',href:'/profile',Icon:UserRound}];
 export default function QuickCenter(){
  const router=useRouter(),path=usePathname(),[pref,SP]=useState<Pref>(defaults),[expanded,EX]=useState(false),[plus,PL]=useState(false);
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
