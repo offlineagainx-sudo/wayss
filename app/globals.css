@@ -179,3 +179,7 @@
 .qc-classic.qc-classic-closed{width:58px;min-width:58px}
 .qc-classic.qc-classic-closed .qc-bar{width:58px;justify-content:center;padding:6px}
 .qc-classic.qc-classic-open .qc-bar{width:min(620px,calc(100vw - 24px))}
+
+
+.flux-progress{position:absolute;left:0;right:0;bottom:0;height:3px;background:#ffffff42;z-index:3}
+.flux-progress span{display:block;height:100%;background:#f32950;transition:width .1s linear}
