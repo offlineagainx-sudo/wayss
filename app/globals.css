@@ -235,3 +235,24 @@
  .qc-classic .qc-bar{width:100%;gap:0;padding:5px 4px}
  .qc-classic .qc-item{flex-direction:column}
 }
+
+
+/* 24-hour story tray and viewer */
+.story-strip{display:flex;align-items:center;gap:15px;padding:13px 15px;overflow-x:auto;scrollbar-width:none}
+.story-strip::-webkit-scrollbar{display:none}
+.story-add,.story-person{flex:0 0 68px;display:grid;justify-items:center;gap:5px;border:0;background:transparent;color:#f5f5f7;font-size:10px}
+.story-add-avatar,.story-ring{width:54px;height:54px;border-radius:50%;display:grid;place-items:center}
+.story-add-avatar{border:1px dashed #f32950;color:#f32950;background:#f3295010}
+.story-ring{padding:3px;background:conic-gradient(#f32950,#ff8b5e,#f32950)}
+.story-ring .avatar{width:48px;height:48px;border:2px solid #101116}
+.story-person b,.story-add b{max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.story-add small{font-size:9px;color:#9296a3}
+.story-viewer-backdrop{z-index:150;background:#03040bf2}
+.story-viewer{position:relative;width:min(100%,430px);height:min(82vh,780px);background:#101116;border:1px solid #343642;border-radius:20px;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.story-viewer-close{position:absolute;right:13px;top:10px;z-index:2;width:34px;height:34px;border:0;border-radius:50%;background:#0008;color:#fff;font-size:23px}
+.story-viewer-head{position:absolute;left:14px;right:55px;top:14px;z-index:2;display:flex;align-items:center;gap:10px;text-shadow:0 1px 8px #000}
+.story-viewer-head .avatar{width:34px;height:34px}
+.story-viewer-head b{font-size:12px}
+.story-viewer-media{width:100%;height:100%;object-fit:contain;background:#050609}
+.story-viewer-caption{position:absolute;bottom:20px;left:15px;right:15px;text-align:center;color:white;text-shadow:0 1px 8px #000;font-size:13px}
+.story-delete{position:absolute;bottom:12px;right:12px;display:flex;align-items:center;gap:7px;border:1px solid #ffffff33;border-radius:10px;padding:8px 11px;background:#090a10d9;color:white;font-size:11px}
