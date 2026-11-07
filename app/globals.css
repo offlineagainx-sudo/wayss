@@ -174,3 +174,8 @@
 .verify-blue{color:#4da8ff;border:1px solid #4da8ff66}
 .verify-pink{color:#ff4f83;border:1px solid #ff4f8366}
 @media(max-width:600px){.wayss-player-controls{opacity:1;padding:18px 8px 7px;gap:6px}.wayss-player-controls button{width:29px;height:29px;flex-basis:29px}.verify-choice-grid{grid-template-columns:1fr}.qc-bar-brand{width:32px;height:32px;flex-basis:32px}}
+
+
+.qc-classic.qc-classic-closed{width:58px;min-width:58px}
+.qc-classic.qc-classic-closed .qc-bar{width:58px;justify-content:center;padding:6px}
+.qc-classic.qc-classic-open .qc-bar{width:min(620px,calc(100vw - 24px))}
