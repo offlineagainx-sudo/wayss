@@ -368,3 +368,12 @@
 .phantom-unlock-icon{width:76px;height:76px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;color:#f32950;background:#f3295018;border:1px solid #f3295060;box-shadow:0 0 50px #f3295022}
 @keyframes phantom-reveal{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:620px){.phantom-content-grid{grid-template-columns:1fr}.phantom-profile-head{align-items:flex-start}.phantom-avatar{width:62px;height:62px;flex-basis:62px}.phantom-cover{height:130px}}
+
+/* Minimal PHANTOM setup */
+.phantom-mode-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 18px}
+.phantom-mode-picker button{display:grid;justify-items:start;gap:7px;text-align:left;padding:14px;border:1px solid #262832;border-radius:13px;background:#08090d;color:#f5f5f7}
+.phantom-mode-picker button.active{border-color:#f32950;background:#171116}
+.phantom-mode-picker button svg{color:#f32950}
+.phantom-mode-picker button b{font-size:13px}
+.phantom-mode-picker button small{font-size:11px;line-height:1.45;color:#9296a3}
+@media(max-width:520px){.phantom-mode-picker{grid-template-columns:1fr}}
