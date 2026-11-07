@@ -5,7 +5,7 @@ import {supabase} from '@/lib/supabase';
 import QuickCenter from '@/components/QuickCenter';
 import VideoPlayer from '@/components/VideoPlayer';
 import ToggleSwitch from '@/components/ToggleSwitch';
-import {Bell,Bookmark,Compass,Heart,Home,MessageCircle,MoreHorizontal,Plus,Search,Send,Share2,ShieldCheck,Sparkles,UserRound,Users,LogOut,X} from 'lucide-react';
+import {Bell,Bookmark,Compass,Heart,Home,MessageCircle,MoreHorizontal,Plus,Search,Send,Share2,ShieldCheck,Sparkles,UserRound,Users,LogOut,Trash2,X} from 'lucide-react';
 type Profile={id:string;username:string;display_name:string|null;avatar_url:string|null;is_verified:boolean;is_wayss_verified?:boolean;is_private:boolean};
 type Post={id:string;content:string|null;media_url:string|null;media_type?:string|null;created_at:string;profiles:Profile;likes:{user_id:string}[]};
 const db=supabase();
