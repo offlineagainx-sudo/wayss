@@ -10,7 +10,7 @@ export default function PhantomStudio(){
  const router=useRouter();
  const [session,S]=useState<any>(null),[profile,P]=useState<any>(null),[challenge,C]=useState<any>(null);
  const [mode,M]=useState<'code'|'puzzle'>('puzzle'),[answer,A]=useState(''),[hint,H]=useState(''),[clue,Q]=useState('');
- const [busy,B]=useState(false),[notice,N]=useState(''),[loaded,L]=useState(false);
+ const [busy,B]=useState(false),[notice,N]=useState(''),[loaded,L]=useState(false),[editing,ED]=useState(false);
  useEffect(()=>{if(!db)return;db.auth.getSession().then(({data}:any)=>S(data.session));const {data:{subscription}}=db.auth.onAuthStateChange((_e:string,s:any)=>S(s));return()=>subscription.unsubscribe()},[]);
  useEffect(()=>{if(session?.user?.id)void load();},[session?.user?.id]);
  async function load(){
@@ -75,7 +75,18 @@ export default function PhantomStudio(){
    await db.rpc('phantom_publish_challenge',{p_published:false});
    N('PHANTOM saved and turned off.');
   }
-  B(false);await load();
+  B(false);await load();ED(false);
+ }
+ async function deletePhantom(){
+  if(!db||!session||!profile)return;
+  if(!window.confirm('Delete your PHANTOM identity, its challenge and all PHANTOM posts, stories and Flux? This cannot be undone.'))return;
+  B(true);N('');
+  const [posts,stories,flux]=await Promise.all([db.from('phantom_posts').select('media_path').eq('owner_id',session.user.id),db.from('phantom_stories').select('media_path').eq('owner_id',session.user.id),db.from('phantom_flux').select('media_path').eq('owner_id',session.user.id)]);
+  const paths=[profile.avatar_url,profile.cover_url,...(posts.data||[]).map((x:any)=>x.media_path),...(stories.data||[]).map((x:any)=>x.media_path),...(flux.data||[]).map((x:any)=>x.media_path)].filter(Boolean);
+  const {error}=await db.from('phantom_profiles').delete().eq('owner_id',session.user.id);
+  if(error){N(error.message);B(false);return;}
+  if(paths.length)await db.storage.from('phantom-media').remove(paths);
+  P(null);C(null);ED(false);N('Your PHANTOM identity has been deleted.');B(false);
  }
  if(!db)return <main className="setup">Connect Supabase first.</main>;
  if(!session)return <main className="setup"><h2>Sign in to create your PHANTOM</h2><button className="primary" onClick={()=>router.push('/')}>Go to WAYSS</button></main>;
@@ -83,6 +94,7 @@ export default function PhantomStudio(){
  return <main className="feature-shell">
   <header className="feature-top"><button className="icon-btn" onClick={()=>router.push('/')}><ArrowLeft/></button><div><b>PHANTOM</b><small>Your second profile</small></div><span className="phantom-mark">PRIVATE</span></header>
   <section className="feature-content phantom-studio">
+   {profile&&!editing?<><p className="eyebrow">YOUR SECOND IDENTITY</p><h1>My Phantom.</h1><section className="panel settings-card"><h3><ShieldCheck size={18}/> @{profile.username}</h3><p className="muted">{profile.display_name||profile.username} · {profile.enabled?"Visible to challengers":"Hidden from challengers"}</p><p className="muted">{profile.bio||"No Phantom bio yet."}</p><div className="phantom-manage-actions"><button className="primary" onClick={()=>ED(true)}><Save size={15}/> Edit PHANTOM</button><button className="secondary-action" disabled={busy} onClick={()=>void deletePhantom()}><Lock size={15}/> Delete PHANTOM</button><button className="secondary-action" onClick={()=>router.push("/phantom/profile/"+session.user.id)}><Eye size={15}/> View my PHANTOM profile</button></div></section>{notice&&<p className="notice">{notice}</p>}</>:<>
    <p className="eyebrow">TWO IDENTITIES. ONE MYSTERY.</p>
    <h1>Create your Phantom.</h1>
    <p className="muted">Set it up just like a profile. Others need your code or the answer to your puzzle before they can see it.</p>
@@ -108,7 +120,8 @@ export default function PhantomStudio(){
    <button className="primary full" disabled={busy} onClick={()=>void save()}><Save size={16}/>{busy?'Saving…':'Save PHANTOM'}</button>
    {profile&&<button className="secondary-action full" onClick={()=>router.push('/phantom/profile/'+session.user.id)}><Eye size={16}/> View my Phantom profile</button>}
    {challenge?.is_published&&<p className="notice">Your Phantom is published.</p>}
-   {notice&&<p className="notice">{notice}</p>}
+   {profile&&editing&&<button className="secondary-action full" onClick={()=>ED(false)}>Cancel editing</button>}
+   {notice&&<p className="notice">{notice}</p>}</>}
   </section><QuickCenter/>
  </main>;
 }
