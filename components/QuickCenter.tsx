@@ -8,12 +8,23 @@ const defaults:Pref={style:'quick',autoCollapse:true,delay:2.5,position:'left',l
 const links=[{label:'Home',href:'/',Icon:Home},{label:'Orbit',href:'/orbit',Icon:Compass},{label:'Msgs',href:'/messages',Icon:MessageCircle},{label:'Profile',href:'/profile',Icon:UserRound}];
 export default function QuickCenter(){
  const router=useRouter(),path=usePathname(),[pref,SP]=useState<Pref>(defaults),[expanded,EX]=useState(false),[plus,PL]=useState(false),[more,MO]=useState(false);
- const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const timer=useRef<ReturnType<typeof setTimeout>|null>(null),swipeStart=useRef<{x:number;y:number}|null>(null);
  useEffect(()=>{const read=()=>{try{const saved=localStorage.getItem(KEY);if(saved){const next={...defaults,...JSON.parse(saved)};SP(next);EX(next.style==='classic');}}catch{}};read();window.addEventListener('wayss-nav-change',read);window.addEventListener('storage',read);return()=>{window.removeEventListener('wayss-nav-change',read);window.removeEventListener('storage',read);};},[]);
  const clear=useCallback(()=>{if(timer.current)clearTimeout(timer.current);timer.current=null;},[]);
  const schedule=useCallback(()=>{clear();if(pref.style==='quick'&&pref.autoCollapse&&!plus)timer.current=setTimeout(()=>{EX(false);PL(false);},pref.delay*1000);},[clear,pref.style,pref.autoCollapse,pref.delay,plus]);
  useEffect(()=>{if(expanded&&pref.style==='quick'&&!plus)schedule();else clear();return clear;},[expanded,plus,pref.style,schedule,clear]);
  useEffect(()=>()=>clear(),[clear]);
+ useEffect(()=>{
+  const start=(x:number,y:number)=>{if(y>=window.innerHeight-130)swipeStart.current={x,y};};
+  const finish=(x:number,y:number)=>{const s=swipeStart.current;swipeStart.current=null;if(!s||Math.abs(y-s.y)>65)return;const dx=x-s.x;if(dx>70){EX(true);PL(false);}else if(dx< -70){EX(false);PL(false);clear();}};
+  const ts=(e:TouchEvent)=>{if(e.touches.length===1)start(e.touches[0].clientX,e.touches[0].clientY)};
+  const te=(e:TouchEvent)=>{if(e.changedTouches.length)finish(e.changedTouches[0].clientX,e.changedTouches[0].clientY)};
+  const ps=(e:PointerEvent)=>{if(e.pointerType==='mouse')start(e.clientX,e.clientY)};
+  const pe=(e:PointerEvent)=>{if(e.pointerType==='mouse')finish(e.clientX,e.clientY)};
+  window.addEventListener('touchstart',ts,{passive:true});window.addEventListener('touchend',te,{passive:true});window.addEventListener('pointerdown',ps);window.addEventListener('pointerup',pe);
+  return()=>{window.removeEventListener('touchstart',ts);window.removeEventListener('touchend',te);window.removeEventListener('pointerdown',ps);window.removeEventListener('pointerup',pe)};
+ },[clear]);
+
  const go=(href:string)=>{clear();PL(false);MO(false);if(pref.style==='quick')EX(false);else EX(true);router.push(href);};
  const isActive=(href:string)=>href==='/'?path==='/':href==='/profile'?path==='/profile'||path.startsWith('/u/'):path===href||path.startsWith(href+'/');
  const navItems=<>{links.slice(0,2).map(({label,href,Icon})=><button key={href} aria-label={label} className={'qc-item '+(isActive(href)?'active':'')} onClick={()=>go(href)}><Icon/>{pref.labels&&<span>{label}</span>}</button>)}<button aria-label="Create" title="Create" className="qc-item qc-plus" onClick={()=>{PL(v=>!v);EX(true);clear();}}><Plus/></button>{links.slice(2).map(({label,href,Icon})=><button key={href} aria-label={label} className={'qc-item '+(isActive(href)?'active':'')} onClick={()=>go(href)}><Icon/>{pref.labels&&<span>{label}</span>}</button>)}</>;
