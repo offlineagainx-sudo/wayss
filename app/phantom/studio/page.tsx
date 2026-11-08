@@ -96,7 +96,7 @@ export default function PhantomStudio(){
   <section className="feature-content phantom-studio">
    {profile&&!editing?<><p className="eyebrow">YOUR SECOND IDENTITY</p><h1>My Phantom.</h1><section className="panel settings-card"><h3><ShieldCheck size={18}/> @{profile.username}</h3><p className="muted">{profile.display_name||profile.username} · {profile.enabled?"Visible to challengers":"Hidden from challengers"}</p><p className="muted">{profile.bio||"No Phantom bio yet."}</p><div className="phantom-manage-actions"><button className="primary" onClick={()=>ED(true)}><Save size={15}/> Edit PHANTOM</button><button className="secondary-action" disabled={busy} onClick={()=>void deletePhantom()}><Lock size={15}/> Delete PHANTOM</button><button className="secondary-action" onClick={()=>router.push("/phantom/profile/"+session.user.id)}><Eye size={15}/> View my PHANTOM profile</button></div></section>{notice&&<p className="notice">{notice}</p>}</>:<>
    <p className="eyebrow">TWO IDENTITIES. ONE MYSTERY.</p>
-   <h1>Create your Phantom.</h1>
+   <h1>{profile?'Edit your Phantom.':'Create your Phantom.'}</h1>
    <p className="muted">Set it up just like a profile. Others need your code or the answer to your puzzle before they can see it.</p>
    <section className="panel settings-card">
     <h3><ShieldCheck size={18}/> Profile details</h3>
