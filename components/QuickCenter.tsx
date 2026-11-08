@@ -15,11 +15,12 @@ export default function QuickCenter(){
  useEffect(()=>{if(expanded&&pref.style==='quick'&&!plus)schedule();else clear();return clear;},[expanded,plus,pref.style,schedule,clear]);
  useEffect(()=>()=>clear(),[clear]);
  useEffect(()=>{
-  const start=(x:number,y:number)=>{if(y>=window.innerHeight-130)swipeStart.current={x,y};};
-  const finish=(x:number,y:number)=>{const s=swipeStart.current;swipeStart.current=null;if(!s||Math.abs(y-s.y)>65)return;const dx=x-s.x;if(dx>70){EX(true);PL(false);}else if(dx< -70){EX(false);PL(false);clear();}};
-  const ts=(e:TouchEvent)=>{if(e.touches.length===1)start(e.touches[0].clientX,e.touches[0].clientY)};
+  const canStart=(target:EventTarget|null)=>{const el=target as HTMLElement|null;return !el?.closest('input,textarea,select,button,a,[role=dialog],.nearby-map-stage,.nearby-sheet,.nearby-overlay,.modal-backdrop,.qc-root,.qc-create,.qc-top-actions');};
+  const start=(x:number,y:number,target:EventTarget|null)=>{if(canStart(target))swipeStart.current={x,y};};
+  const finish=(x:number,y:number)=>{const s=swipeStart.current;swipeStart.current=null;if(!s)return;const dx=x-s.x,dy=y-s.y;if(Math.abs(dx)<90||Math.abs(dx)<Math.abs(dy)*1.35)return;if(dx>0){EX(true);PL(false);MO(false);}else{EX(false);PL(false);MO(false);clear();}};
+  const ts=(e:TouchEvent)=>{if(e.touches.length===1)start(e.touches[0].clientX,e.touches[0].clientY,e.target)};
   const te=(e:TouchEvent)=>{if(e.changedTouches.length)finish(e.changedTouches[0].clientX,e.changedTouches[0].clientY)};
-  const ps=(e:PointerEvent)=>{if(e.pointerType==='mouse')start(e.clientX,e.clientY)};
+  const ps=(e:PointerEvent)=>{if(e.pointerType==='mouse')start(e.clientX,e.clientY,e.target)};
   const pe=(e:PointerEvent)=>{if(e.pointerType==='mouse')finish(e.clientX,e.clientY)};
   window.addEventListener('touchstart',ts,{passive:true});window.addEventListener('touchend',te,{passive:true});window.addEventListener('pointerdown',ps);window.addEventListener('pointerup',pe);
   return()=>{window.removeEventListener('touchstart',ts);window.removeEventListener('touchend',te);window.removeEventListener('pointerdown',ps);window.removeEventListener('pointerup',pe)};
