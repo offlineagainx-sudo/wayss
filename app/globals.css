@@ -569,3 +569,7 @@ html[data-compact="true"] .setting-row{padding:9px 0}
  .settings-subhero,.settings-notice{grid-column:1/-1}
 }
 @media(max-width:680px){.settings-subhero{align-items:flex-start}.settings-subhero .settings-category-icon{width:42px;height:42px;flex-basis:42px}}
+
+.qc-root{--qc-duration:220ms}
+.qc-root,.qc-root *{transition-duration:var(--qc-duration,220ms)}
+.qc-root.qc-no-animations,.qc-root.qc-no-animations *{animation:none!important;transition:none!important}
