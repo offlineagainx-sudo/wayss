@@ -82,7 +82,7 @@ export default function PhantomStudio(){
   if(!window.confirm('Delete your PHANTOM identity, its challenge and all PHANTOM posts, stories and Flux? This cannot be undone.'))return;
   B(true);N('');
   const [posts,stories,flux]=await Promise.all([db.from('phantom_posts').select('media_path').eq('owner_id',session.user.id),db.from('phantom_stories').select('media_path').eq('owner_id',session.user.id),db.from('phantom_flux').select('media_path').eq('owner_id',session.user.id)]);
-  const paths=[profile.avatar_url,profile.cover_url,...(posts.data||[]).map((x:any)=>x.media_path),...(stories.data||[]).map((x:any)=>x.media_path),...(flux.data||[]).map((x:any)=>x.media_path)].filter(Boolean);
+  const paths=[profile.avatar_url,profile.cover_url,...(posts.data||[]).map((x:any)=>x.media_path),...(stories.data||[]).map((x:any)=>x.media_path),...(flux.data||[]).map((x:any)=>x.media_path)].filter((x):x is string=>typeof x==='string'&&x.length>0);
   const {error}=await db.from('phantom_profiles').delete().eq('owner_id',session.user.id);
   if(error){N(error.message);B(false);return;}
   if(paths.length)await db.storage.from('phantom-media').remove(paths);
