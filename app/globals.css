@@ -428,3 +428,53 @@
 
 .eclipse-media{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:12px;background:#050609;margin-top:10px}
 .eclipse-composer input[type=file]{padding:10px;color:#9296a3;font-size:11px}
+
+
+/* WAYSS interface consistency pass */
+.settings-card{min-width:0;overflow:hidden}
+.settings-card h3{font-size:15px;line-height:1.3}
+.settings-card h3 svg{width:18px;height:18px;flex:0 0 18px;stroke-width:1.9}
+.settings-card .secondary-action,.settings-card .primary,.settings-content>.primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px}
+.setting-row{min-width:0}
+.setting-row>span{min-width:0;flex:1}
+.setting-row small{line-height:1.5}
+.setting-row>[role=switch],.setting-row button{flex:0 0 auto}
+.settings-content{width:min(100% - 28px,760px);padding-bottom:120px}
+.settings-content h1{margin:6px 0 20px}
+.settings-card{border-radius:17px}
+.setting-password{flex-wrap:wrap}
+.setting-password input{min-width:min(100%,220px)}
+.nav-position{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.nav-position>span{width:100%}
+.nav-position button{min-height:38px;padding:8px 12px;border:1px solid #30313d;border-radius:10px;background:#0b0c12;color:#b8bbc6;font-size:11px}
+.nav-position button.active{border-color:#f32950;color:#fff;background:#f3295018}
+.qc-top-actions{max-width:calc(100vw - 20px);min-width:0}
+.qc-nearby,.qc-flux,.qc-more-trigger{flex:0 0 auto;white-space:nowrap}
+.qc-more-menu{max-height:min(70vh,420px);overflow-y:auto}
+.qc-root{max-width:calc(100vw - 20px)}
+.qc-bar{min-width:0}
+.qc-item{white-space:nowrap}
+@media(max-width:420px){
+ .qc-top-actions{gap:5px;right:8px}
+ .qc-nearby,.qc-flux{width:40px;padding:0;font-size:0;gap:0}
+ .qc-nearby span,.qc-flux span{display:none}
+ .qc-nearby svg,.qc-flux svg{width:17px;height:17px}
+ .qc-more-trigger{width:40px}
+ .settings-content{width:calc(100% - 24px)}
+ .settings-card{padding:15px;margin:11px 0}
+ .setting-row{gap:10px}
+ .setting-row b{font-size:12px}
+ .setting-row small{font-size:10px}
+}
+@media(max-width:360px){
+ .qc-root:not(.qc-classic){left:8px;right:8px}
+ .qc-root .qc-bar{width:calc(100vw - 66px)}
+ .qc-item{padding-left:1px;padding-right:1px}
+ .qc-item span{font-size:8px}
+ .qc-item.qc-plus{width:36px;height:36px;flex-basis:36px}
+}
+html[data-reduced-motion="true"] *,html[data-reduced-motion="true"] *::before,html[data-reduced-motion="true"] *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+html[data-compact="true"] .panel{padding:14px}
+html[data-compact="true"] .settings-card{padding:14px;margin:9px 0}
+html[data-compact="true"] .setting-row{padding:9px 0}
+@media(prefers-reduced-motion:reduce){.wayss-pull-indicator.is-refreshing .wayss-pull-orbit{animation:none!important}}
