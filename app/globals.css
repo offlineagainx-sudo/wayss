@@ -478,3 +478,12 @@ html[data-compact="true"] .panel{padding:14px}
 html[data-compact="true"] .settings-card{padding:14px;margin:9px 0}
 html[data-compact="true"] .setting-row{padding:9px 0}
 @media(prefers-reduced-motion:reduce){.wayss-pull-indicator.is-refreshing .wayss-pull-orbit{animation:none!important}}
+
+
+/* Keep the home notification control separate from the global action cluster. */
+.home-shell .topbar .top-actions{position:fixed;z-index:109;top:max(14px,env(safe-area-inset-top));right:214px;display:flex;align-items:center;gap:8px}
+.home-shell .topbar .top-actions .icon-btn{position:relative;width:42px;height:42px;display:grid;place-items:center;border:1px solid #ffffff24;border-radius:13px;background:#101116ed;backdrop-filter:blur(20px);box-shadow:0 8px 24px #0007}
+.home-shell .topbar .top-actions .icon-btn>svg{width:19px;height:19px}
+.home-shell .topbar .top-actions .icon-btn>span{top:-5px;right:-5px}
+@media(max-width:600px){.home-shell .topbar .top-actions{top:max(9px,env(safe-area-inset-top));right:145px}.home-shell .topbar .top-actions .icon-btn{width:38px;height:38px}}
+@media(max-width:420px){.home-shell .topbar .top-actions{right:145px}}
