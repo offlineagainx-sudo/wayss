@@ -1,7 +1,7 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {usePathname,useRouter} from 'next/navigation';
-import {Home,Compass,Plus,MessageCircle,UserRound,ImagePlus,Images,Video,MapPin,MoreHorizontal,Settings,ChevronLeft,Shield,UserCog,Ghost} from 'lucide-react';
+import {Home,Compass,Plus,MessageCircle,UserRound,ImagePlus,Images,Video,MapPin,MoreHorizontal,Settings,Shield,UserCog,Ghost} from 'lucide-react';
 type Pref={style:'quick'|'classic';autoCollapse:boolean;delay:number;position:'left'|'center';labels:boolean};
 const KEY='wayss-navigation-v1';
 const defaults:Pref={style:'quick',autoCollapse:true,delay:2.5,position:'left',labels:true};
