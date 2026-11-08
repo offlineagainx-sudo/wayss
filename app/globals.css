@@ -562,3 +562,10 @@ html[data-compact="true"] .setting-row{padding:9px 0}
 .nav-live-pill>span.preview-active{color:#ff6b88}
 .nav-live-pill small{font-size:8px;color:#aeb1bd}
 @media(max-width:680px){.settings-hub .settings-content{width:calc(100% - 22px);padding-top:8px}.settings-category-grid{grid-template-columns:1fr;gap:9px}.settings-category-card{padding:14px}.settings-subhero{padding:15px}.settings-stats b{font-size:18px}}
+
+@media(min-width:900px){
+ .settings-hub .settings-content{display:block}
+ .settings-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .settings-subhero,.settings-notice{grid-column:1/-1}
+}
+@media(max-width:680px){.settings-subhero{align-items:flex-start}.settings-subhero .settings-category-icon{width:42px;height:42px;flex-basis:42px}}
