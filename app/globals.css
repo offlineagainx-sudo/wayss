@@ -573,3 +573,8 @@ html[data-compact="true"] .setting-row{padding:9px 0}
 .qc-root{--qc-duration:220ms}
 .qc-root,.qc-root *{transition-duration:var(--qc-duration,220ms)}
 .qc-root.qc-no-animations,.qc-root.qc-no-animations *{animation:none!important;transition:none!important}
+
+/* Profile photo avatar controls */
+.profile-avatar{position:relative}
+.profile-avatar-upload{position:absolute;right:-5px;bottom:-5px;background:#171923;border:1px solid var(--line);border-radius:50%;padding:7px;cursor:pointer;display:grid;place-items:center}
+.profile-avatar .avatar.xl{width:104px;height:104px;border-radius:50%;display:block;object-fit:cover}
