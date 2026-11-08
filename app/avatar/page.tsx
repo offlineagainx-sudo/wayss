@@ -5,6 +5,7 @@ import {ArrowLeft,Check,RotateCcw,Sparkles} from 'lucide-react';
 import {supabase} from '@/lib/supabase';
 import AvatarView,{AvatarIllustration,AvatarConfig} from '@/components/AvatarView';
 import QuickCenter from '@/components/QuickCenter';
+import './avatar.css';
 const db=supabase();
 const choices={skin:[['warm','Warm'],['light','Light'],['tan','Tan'],['deep','Deep'],['rose','Rose']],hair:[['espresso','Espresso'],['black','Black'],['chestnut','Chestnut'],['blonde','Blonde'],['silver','Silver'],['pink','Pink']],hairStyle:[['soft','Soft'],['crop','Crop'],['long','Long'],['curly','Curly']],eyes:[['brown','Brown'],['green','Green'],['blue','Blue']],outfit:[['violet','Violet'],['coral','Coral'],['mint','Mint'],['blue','Blue'],['black','Black'],['sun','Sun']],background:[['lavender','Lavender'],['night','Night'],['peach','Peach'],['mint','Mint'],['sky','Sky'],['cream','Cream']],accessory:[['none','None'],['glasses','Glasses'],['cap','Cap'],['earrings','Earrings']]} as const;
 type Tab=keyof typeof choices;
