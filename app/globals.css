@@ -377,3 +377,19 @@
 .phantom-mode-picker button b{font-size:13px}
 .phantom-mode-picker button small{font-size:11px;line-height:1.45;color:#9296a3}
 @media(max-width:520px){.phantom-mode-picker{grid-template-columns:1fr}}
+
+/* WAYSS navigation refinements */
+.qc-classic{width:calc(100vw - 48px);max-width:1100px;left:50%;transform:translateX(-50%)}
+.qc-classic .qc-bar{width:100%;max-width:none}
+.qc-top-actions{gap:7px}
+.qc-flux{height:42px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 13px;border:1px solid #ffffff24;border-radius:13px;background:#101116ed;color:#e9eaf0;backdrop-filter:blur(20px);box-shadow:0 8px 24px #0007;font-size:12px}
+.qc-flux.active{border-color:#f3295070;color:#f32950}
+@media(max-width:600px){.qc-classic{width:calc(100vw - 20px);left:50%;right:auto}.qc-top-actions{top:max(9px,env(safe-area-inset-top));right:9px;gap:5px}.qc-nearby,.qc-flux,.qc-more-trigger{height:38px;padding:0 9px;font-size:10px}.qc-nearby svg,.qc-flux svg{width:14px;height:14px}}
+/* Themed pull-to-refresh indicator */
+.wayss-pull-indicator{position:fixed;z-index:9999;top:0;left:50%;display:flex;align-items:center;gap:9px;padding:9px 14px;border:1px solid #f3295050;border-radius:999px;background:#11131cf2;color:#f5f5f7;box-shadow:0 8px 28px #0008;backdrop-filter:blur(18px);transition:opacity .18s ease,transform .12s ease;pointer-events:none}
+.wayss-pull-indicator small{font-size:10px;letter-spacing:.2px;white-space:nowrap}
+.wayss-pull-orbit{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;color:#ff5279;background:#f3295017}
+.wayss-pull-indicator.is-refreshing .wayss-pull-orbit{animation:wayss-orbit-spin .8s linear infinite}
+@keyframes wayss-orbit-spin{to{transform:rotate(360deg)}}
+.phantom-manage-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+@media(max-width:600px){.phantom-manage-actions{display:grid;grid-template-columns:1fr}.phantom-manage-actions button{width:100%}}
