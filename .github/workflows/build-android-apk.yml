@@ -26,16 +26,36 @@ jobs:
           java-version: '21'
 
       - name: Install Capacitor and icon tooling
-        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7 sharp @capacitor/assets
+        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7 sharp
 
       - name: Generate Android project
         run: npx cap add android
 
-      - name: Generate WAYSS launcher icon
+      - name: Write WAYSS launcher icons into native Android resources
         run: |
-          mkdir -p assets public android/app/src/main/assets/public
-          node -e "require('sharp')('assets/wayss-icon.svg').resize(1024,1024).png().toFile('assets/icon-only.png')"
-          npx capacitor-assets generate --android
+          node <<'NODE'
+          const sharp = require('sharp');
+          const fs = require('fs');
+          const path = require('path');
+          const source = 'assets/wayss-icon.svg';
+          const root = 'android/app/src/main/res';
+          const densities = { mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 };
+          (async () => {
+            for (const [density, size] of Object.entries(densities)) {
+              const dir = path.join(root, 'mipmap-' + density);
+              fs.mkdirSync(dir, { recursive: true });
+              for (const name of ['ic_launcher.png', 'ic_launcher_round.png', 'ic_launcher_foreground.png']) {
+                await sharp(source).resize(size, size).png().toFile(path.join(dir, name));
+              }
+            }
+            const adaptive = path.join(root, 'mipmap-anydpi-v26');
+            fs.mkdirSync(adaptive, { recursive: true });
+            const xml = name => `<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n  <background android:drawable="@android:color/black"/>\n  <foreground android:drawable="@mipmap/ic_launcher_foreground"/>\n</adaptive-icon>\n`;
+            fs.writeFileSync(path.join(adaptive, 'ic_launcher.xml'), xml('ic_launcher'));
+            fs.writeFileSync(path.join(adaptive, 'ic_launcher_round.xml'), xml('ic_launcher_round'));
+            console.log('WAYSS branded launcher resources generated for all Android densities.');
+          })().catch(err => { console.error(err); process.exit(1); });
+          NODE
 
       - name: Sync Android project
         run: npx cap sync android
