@@ -3,6 +3,7 @@ import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {supabase} from '@/lib/supabase';
 import QuickCenter from '@/components/QuickCenter';
+import DefaultAvatar from '@/components/DefaultAvatar';
 import VideoPlayer from '@/components/VideoPlayer';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import {Bell,Bookmark,Compass,Heart,Home,MessageCircle,MoreHorizontal,Plus,Search,Send,Share2,ShieldCheck,Sparkles,UserRound,Users,LogOut,Trash2,X} from 'lucide-react';
@@ -11,7 +12,7 @@ type Post={id:string;content:string|null;media_url:string|null;media_type?:strin
 type Story={id:string;user_id:string;media_url:string;media_type:'image'|'video';caption:string|null;created_at:string;expires_at:string;profiles:any};
 const notificationLabels:Record<string,string>={'nearby_event_invite':'invited you to a private Nearby event','nearby_event_invite_accepted':'accepted your Nearby event invitation','nearby_event_invite_declined':'declined your Nearby event invitation','phantom_challenge_started':'started your PHANTOM challenge','phantom_stage_solved':'solved a PHANTOM puzzle stage','phantom_hint_requested':'requested a PHANTOM hint','phantom_clue_reported':'reported a PHANTOM clue','phantom_unlocked':'unlocked your PHANTOM identity','phantom_challenge_defeated':'gave up on your PHANTOM challenge','phantom_access_revoked':'your PHANTOM access was revoked','phantom_hint_answered':'answered your PHANTOM hint request','phantom_hint_rejected':'declined your PHANTOM hint request'};
 const db=supabase();
-function Avatar({p,size='md'}:{p?:Partial<Profile>|null;size?:string}){const label=(p?.display_name||p?.username||'W').slice(0,1).toUpperCase();return p?.avatar_url?<img className={'avatar '+size} src={p.avatar_url} alt=""/>:<span className={'avatar fallback '+size}>{label}</span>}
+function Avatar({p,size='md'}:{p?:Partial<Profile>|null;size?:string}){const label=(p?.display_name||p?.username||'W').slice(0,1).toUpperCase();return p?.avatar_url?<img className={'avatar '+size} src={p.avatar_url} alt=""/>:<DefaultAvatar className={'avatar '+size}/>}
 export default function Page(){
  const router=useRouter();
  const [session,S]=useState<any>(null),[profile,P]=useState<Profile|null>(null),[isAdmin,IA]=useState(false),[posts,F]=useState<Post[]>([]),[loading,L]=useState(true),[query,Q]=useState(''),[matches,M]=useState<Profile[]>([]),[draft,D]=useState(''),[notice,N]=useState(''),[busy,B]=useState(false),[email,E]=useState(''),[password,W]=useState(''),[username,U]=useState(''),[displayName,G]=useState(''),[signup,A]=useState(false);const [profileOpen,PO]=useState(false),[notifsOpen,NO]=useState(false),[editName,EN]=useState(''),[editBio,EB]=useState(''),[editPrivate,EP]=useState(false),[notifications,NT]=useState<any[]>([]),[mediaFile,MF]=useState<File|null>(null),[commentPost,CP]=useState<Post|null>(null),[comments,CM]=useState<any[]>([]),[commentDraft,CD]=useState(''),[verifyNote,VN]=useState(''),[verificationType,VT]=useState<'normal'|'wayss'>('normal'),[termsAccepted,TA]=useState(false),[savedIds,SV]=useState<string[]>([]),[postMenu,PM]=useState<string|null>(null),[stories,ST]=useState<Story[]>([]),[storyViewer,SW]=useState<Story|null>(null);
