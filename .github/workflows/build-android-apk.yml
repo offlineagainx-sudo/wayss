@@ -57,6 +57,9 @@ jobs:
           })().catch(err => { console.error(err); process.exit(1); });
           NODE
 
+      - name: Prepare Capacitor Android assets directory
+        run: mkdir -p android/app/src/main/assets/public
+
       - name: Sync Android project
         run: npx cap sync android
 
