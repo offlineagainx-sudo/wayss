@@ -25,14 +25,17 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Install Capacitor
-        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7
+      - name: Install Capacitor and icon tooling
+        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7 sharp @capacitor/assets
 
       - name: Generate Android project
         run: npx cap add android
 
-      - name: Prepare Capacitor asset directories
-        run: mkdir -p public android/app/src/main/assets/public
+      - name: Generate WAYSS launcher icon
+        run: |
+          mkdir -p assets public android/app/src/main/assets/public
+          node -e "require('sharp')('assets/wayss-icon.svg').resize(1024,1024).png().toFile('assets/icon-only.png')"
+          npx capacitor-assets generate --android
 
       - name: Sync Android project
         run: npx cap sync android
