@@ -3,6 +3,7 @@ import {useEffect,useMemo,useRef,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {supabase} from '@/lib/supabase';
 import QuickCenter from '@/components/QuickCenter';
+import DefaultAvatar from '@/components/DefaultAvatar';
 import VideoPlayer from '@/components/VideoPlayer';
 import AudioPlayer from '@/components/AudioPlayer';
 import {ArrowLeft,Send,Search,MessageCircle,Plus,Paperclip,Smile,MoreHorizontal,Reply,Copy,Trash2,Pencil,Heart,Image as ImageIcon,Video,Users,PanelRightClose,PanelRightOpen,Check,CheckCheck,X,Phone,Info,Pin,Volume2,VolumeX,Archive,Flag} from 'lucide-react';
@@ -11,7 +12,7 @@ type Person={id:string;username:string;display_name:string|null;avatar_url:strin
 type Msg={id:string;conversation_id:string;sender_id:string;body:string|null;created_at:string;media_url:string|null;media_type:string|null;reply_to_id?:string|null;edited_at?:string|null;deleted_at?:string|null;read_at?:string|null;message_reactions?:{user_id:string;emoji:string}[]};
 type Chat={id:string;kind:string;group_name:string|null;group_avatar_url?:string|null;members:Person[];last?:Msg|null;unread:number;starred:boolean;request_status?:string|null;archived_at?:string|null;muted_until?:string|null;last_read_at?:string|null;last_delivered_at?:string|null};
 const stamp=(d:string)=>new Date(d).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-function Avatar({person,size=42}:{person?:Person|null;size?:number}){return <span className="dm-avatar" style={{width:size,height:size}}>{person?.avatar_url?<img src={person.avatar_url} alt=""/>:<span className="avatar fallback dm">{(person?.display_name||person?.username||'W').slice(0,1).toUpperCase()}</span>}</span>}
+function Avatar({person,size=42}:{person?:Person|null;size?:number}){return <span className="dm-avatar" style={{width:size,height:size}}>{person?.avatar_url?<img src={person.avatar_url} alt=""/>:<DefaultAvatar className="avatar dm"/>}</span>}
 export default function MessagesPage(){
  const router=useRouter(),preserveScroll=useRef(false),bottom=useRef<HTMLDivElement>(null),fileRef=useRef<HTMLInputElement>(null),channelRef=useRef<any>(null),recorderRef=useRef<MediaRecorder|null>(null),recordChunks=useRef<Blob[]>([]),typingTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const [session,S]=useState<any>(null),[recording,REC]=useState(false),[olderLoading,OL]=useState(false),[mediaGallery,MG]=useState(false),[messageSearch,MS]=useState(''),[messageMatches,MM]=useState<Msg[]>([]),[deliveredAt,DA]=useState<string|null>(null),[myRole,MR]=useState('member'),[addingMember,AM]=useState(false),[query,Q]=useState(''),[matches,M]=useState<Person[]>([]),[peer,P]=useState<Person|null>(null),[cid,C]=useState(''),[items,I]=useState<Msg[]>([]),[draft,D]=useState(''),[notice,N]=useState(''),[busy,B]=useState(false),[mediaFile,MF]=useState<File|null>(null),[conversations,CS]=useState<Chat[]>([]),[groupMode,GM]=useState(false),[groupName,GN]=useState(''),[selected,SEL]=useState<Person[]>([]),[replyTo,RT]=useState<Msg|null>(null),[editing,ED]=useState<Msg|null>(null),[filter,F]=useState('all'),[details,DT]=useState(false),[typing,T]=useState(false),[online,ON]=useState(false),[emojiOpen,EO]=useState(false),[headerMenu,HM]=useState(false);
