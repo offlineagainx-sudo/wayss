@@ -9,7 +9,8 @@ const filters=[
 type Point={x:number;y:number};
 export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState<Point>({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[text,setText]=useState(''),[showAdjust,setShowAdjust]=useState(false),[busy,setBusy]=useState(false);
- const imgRef=useRef<HTMLImageElement>(null);\n const stageRef=useRef<HTMLDivElement>(null);
+ const imgRef=useRef<HTMLImageElement>(null);
+ const stageRef=useRef<HTMLDivElement>(null);
  const pointers=useRef(new Map<number,Point>());
  const gesture=useRef<{distance:number;zoom:number;mid:Point;offset:Point;start:Point}|null>(null);
  useEffect(()=>{const u=URL.createObjectURL(file);setUrl(u);return()=>URL.revokeObjectURL(u)},[file]);
@@ -17,7 +18,14 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const fullFilter=useMemo(()=>(filter?filter+' ':'')+'brightness('+brightness/100+') contrast('+contrast/100+')',[filter,brightness,contrast]);
  function distance(a:Point,b:Point){return Math.hypot(a.x-b.x,a.y-b.y)}
  function midpoint(a:Point,b:Point):Point{return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}
- function clampOffset(next:Point,scaleZoom=zoom,angle=rotation):Point{\n  const stage=stageRef.current,img=imgRef.current;if(!stage||!img?.naturalWidth||!img.naturalHeight)return next;\n  const rect=stage.getBoundingClientRect();const fit=Math.max(rect.width/img.naturalWidth,rect.height/img.naturalHeight)*scaleZoom;\n  let width=img.naturalWidth*fit,height=img.naturalHeight*fit;if(Math.abs(angle%180)===90)[width,height]=[height,width];\n  const maxX=Math.max(0,(width-rect.width)/2),maxY=Math.max(0,(height-rect.height)/2);\n  return {x:Math.min(maxX,Math.max(-maxX,next.x)),y:Math.min(maxY,Math.max(-maxY,next.y))};\n }\n function pointerDown(e:ReactPointerEvent<HTMLDivElement>){
+ function clampOffset(next:Point,scaleZoom=zoom,angle=rotation):Point{
+  const stage=stageRef.current,img=imgRef.current;if(!stage||!img?.naturalWidth||!img.naturalHeight)return next;
+  const rect=stage.getBoundingClientRect();const fit=Math.max(rect.width/img.naturalWidth,rect.height/img.naturalHeight)*scaleZoom;
+  let width=img.naturalWidth*fit,height=img.naturalHeight*fit;if(Math.abs(angle%180)===90)[width,height]=[height,width];
+  const maxX=Math.max(0,(width-rect.width)/2),maxY=Math.max(0,(height-rect.height)/2);
+  return {x:Math.min(maxX,Math.max(-maxX,next.x)),y:Math.min(maxY,Math.max(-maxY,next.y))};
+ }
+ function pointerDown(e:ReactPointerEvent<HTMLDivElement>){
   e.currentTarget.setPointerCapture(e.pointerId);
   const rect=e.currentTarget.getBoundingClientRect();const p={x:e.clientX-rect.left,y:e.clientY-rect.top};
   pointers.current.set(e.pointerId,p);
