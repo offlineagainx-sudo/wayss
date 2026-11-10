@@ -25,6 +25,7 @@ export default function NearbyPrivacySettings(){
  }
  async function save(){
   if(!db||!session)return;B(true);N('');
+  if((arrival||departure)&&typeof Notification!=='undefined'&&Notification.permission==='default'){try{await Notification.requestPermission();}catch{}}
   const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),arrival_notifications:arrival,departure_notifications:departure,updated_at:new Date().toISOString()});
   if(error){N(error.message);B(false);return;}
   if(!sharing||ghost){
