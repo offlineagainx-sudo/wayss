@@ -9,7 +9,7 @@ const filters=[
 type Point={x:number;y:number};
 export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState<Point>({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[text,setText]=useState(''),[showAdjust,setShowAdjust]=useState(false),[busy,setBusy]=useState(false);
- const imgRef=useRef<HTMLImageElement>(null);
+ const imgRef=useRef<HTMLImageElement>(null);\n const stageRef=useRef<HTMLDivElement>(null);
  const pointers=useRef(new Map<number,Point>());
  const gesture=useRef<{distance:number;zoom:number;mid:Point;offset:Point;start:Point}|null>(null);
  useEffect(()=>{const u=URL.createObjectURL(file);setUrl(u);return()=>URL.revokeObjectURL(u)},[file]);
@@ -17,7 +17,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const fullFilter=useMemo(()=>(filter?filter+' ':'')+'brightness('+brightness/100+') contrast('+contrast/100+')',[filter,brightness,contrast]);
  function distance(a:Point,b:Point){return Math.hypot(a.x-b.x,a.y-b.y)}
  function midpoint(a:Point,b:Point):Point{return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}
- function pointerDown(e:ReactPointerEvent<HTMLDivElement>){
+ function clampOffset(next:Point,scaleZoom=zoom,angle=rotation):Point{\n  const stage=stageRef.current,img=imgRef.current;if(!stage||!img?.naturalWidth||!img.naturalHeight)return next;\n  const rect=stage.getBoundingClientRect();const fit=Math.max(rect.width/img.naturalWidth,rect.height/img.naturalHeight)*scaleZoom;\n  let width=img.naturalWidth*fit,height=img.naturalHeight*fit;if(Math.abs(angle%180)===90)[width,height]=[height,width];\n  const maxX=Math.max(0,(width-rect.width)/2),maxY=Math.max(0,(height-rect.height)/2);\n  return {x:Math.min(maxX,Math.max(-maxX,next.x)),y:Math.min(maxY,Math.max(-maxY,next.y))};\n }\n function pointerDown(e:ReactPointerEvent<HTMLDivElement>){
   e.currentTarget.setPointerCapture(e.pointerId);
   const rect=e.currentTarget.getBoundingClientRect();const p={x:e.clientX-rect.left,y:e.clientY-rect.top};
   pointers.current.set(e.pointerId,p);
@@ -41,7 +41,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    const w=1080,h=mode==='avatar'?1080:1920,canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Photo editing is not supported on this device.');
    const base=Math.max(w/img.naturalWidth,h/img.naturalHeight),dw=img.naturalWidth*base,dh=img.naturalHeight*base;
-   const stage=document.querySelector('.photo-editor-stage') as HTMLElement|null;
+   const stage=stageRef.current;
    const rx=w/(stage?.clientWidth||w),ry=h/(stage?.clientHeight||h);
    ctx.translate(w/2+offset.x*rx,h/2+offset.y*ry);ctx.rotate(rotation*Math.PI/180);ctx.scale(zoom,zoom);
    ctx.filter=fullFilter;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.filter='none';
@@ -54,19 +54,19 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  return <div className="photo-editor-backdrop" role="dialog" aria-modal="true" aria-label={mode==='avatar'?'Adjust profile picture':'Edit story'}>
   <section className={'photo-editor '+(mode==='story'?'story-editor':'avatar-editor')}>
    <header><button type="button" onClick={onCancel} aria-label="Close"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" className="done" onClick={()=>void apply()} disabled={busy}>{busy?'Saving…':<><Check size={17}/> Done</>}</button></header>
-   <div className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp}>
+   <div ref={stageRef} className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp}>
     <img ref={imgRef} src={url} alt="Image to crop" draggable={false} style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter}}/>
     {mode==='avatar'&&<div className="avatar-crop-guide" aria-hidden="true"><span/></div>}
    </div>
    <div className="gesture-hint">{mode==='avatar'?'Drag to position · Pinch to zoom · Move the photo inside the circle':'Drag to move · Pinch to zoom · Rotate to adjust'}</div>
    {mode==='story'&&<div className="story-tools">
-    <button type="button" onClick={()=>setRotation(v=>(v+90)%360)}><RotateCw size={18}/><small>Rotate</small></button>
+    <button type="button" onClick={()=>{setRotation(v=>(v+90)%360);setOffset({x:0,y:0})}}><RotateCw size={18}/><small>Rotate</small></button>
     <button type="button" onClick={()=>setShowAdjust(v=>!v)}><SlidersHorizontal size={18}/><small>Adjust</small></button>
     <label><Type size={18}/><small>Add text</small><input value={text} onChange={e=>setText(e.target.value)} placeholder="Write something…"/></label>
    </div>}
    {showAdjust&&mode==='story'&&<div className="adjust-panel"><label>Brightness <input type="range" min="50" max="150" value={brightness} onChange={e=>setBrightness(+e.target.value)}/></label><label>Contrast <input type="range" min="50" max="150" value={contrast} onChange={e=>setContrast(+e.target.value)}/></label></div>}
    {mode==='story'&&<div className="photo-filter-strip">{filters.map(([name,css],i)=><button type="button" key={name} className={selected===i?'active':''} onClick={()=>setSelected(i)}><span><img src={url} alt="" style={{filter:css}}/></span><small>{name}</small></button>)}</div>}
-   {mode==='avatar'&&<div className="avatar-actions"><button type="button" onClick={()=>{setZoom(1);setOffset({x:0,y:0});setRotation(0)}}>Reset position</button><button type="button" onClick={()=>setRotation(v=>(v+90)%360)}><RotateCw size={15}/> Rotate</button></div>}
+   {mode==='avatar'&&<div className="avatar-actions"><button type="button" onClick={()=>{setZoom(1);setOffset({x:0,y:0});setRotation(0)}}>Reset position</button><button type="button" onClick={()=>{setRotation(v=>(v+90)%360);setOffset({x:0,y:0})}}><RotateCw size={15}/> Rotate</button></div>}
    {mode==='story'&&<footer><button type="button" className="cancel" onClick={onCancel}>Discard</button><button type="button" className="primary" onClick={()=>void apply()} disabled={busy}>{busy?'Applying…':'Use photo'}</button></footer>}
   </section>
   <style jsx>{`
