@@ -626,3 +626,124 @@ html[data-compact="true"] .setting-row{padding:9px 0}
  .profile-heading small{font-size:11px;margin-top:2px}
  .profile-identity>div:last-child{grid-column:2;grid-row:2}
 }
+
+
+/* Restore the central create action as a true circle in every navigation mode */
+.qc-root .qc-bar .qc-item.qc-plus,
+.qc-root.qc-expanded .qc-bar .qc-item.qc-plus{
+  flex:0 0 58px!important;
+  width:58px!important;
+  min-width:58px!important;
+  max-width:58px!important;
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  aspect-ratio:1/1;
+  padding:0!important;
+  margin:0 5px;
+  border-radius:50%!important;
+  align-self:center;
+  display:grid!important;
+  place-items:center!important;
+  box-sizing:border-box;
+  transform:none!important;
+}
+.qc-root .qc-bar .qc-item.qc-plus svg{width:25px!important;height:25px!important;flex:none}
+
+/* Active conversation becomes an immersive full-screen chat, not a floating card */
+body:has(.dm-app.dm-chat-open) .qc-root{display:none!important}
+body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
+.dm-app.dm-chat-open{
+  position:fixed!important;
+  inset:0!important;
+  z-index:70;
+  width:100%!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  display:flex;
+  flex-direction:column;
+  background:#090a10;
+}
+.dm-app.dm-chat-open>.topbar{
+  flex:0 0 60px;
+  min-height:60px;
+  height:60px;
+  margin:0;
+  border-radius:0;
+  padding-left:max(12px,env(safe-area-inset-left));
+  padding-right:max(12px,env(safe-area-inset-right));
+}
+.dm-app.dm-chat-open .dm-layout{
+  flex:1 1 auto;
+  width:100%;
+  max-width:none;
+  min-height:0;
+  height:auto;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:0;
+}
+.dm-app.dm-chat-open .dm-conversation{
+  height:100%;
+  min-height:0;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.dm-app.dm-chat-open .dm-convo-head{
+  flex:0 0 66px;
+  min-height:66px;
+  padding-left:max(12px,env(safe-area-inset-left));
+  padding-right:max(12px,env(safe-area-inset-right));
+}
+.dm-app.dm-chat-open .dm-message-area{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding-bottom:16px;
+}
+.dm-app.dm-chat-open .dm-composer{
+  flex:0 0 auto;
+  position:relative;
+  z-index:2;
+  padding:10px max(12px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:#0d0f17;
+  border-top:1px solid #ffffff18;
+}
+.dm-app.dm-chat-open .dm-composer textarea{
+  min-height:44px;
+  max-height:120px;
+  resize:none;
+}
+.dm-app.dm-chat-open .dm-attachment-preview,
+.dm-app.dm-chat-open .reply-preview,
+.dm-app.dm-chat-open .dm-emoji-row{
+  flex:0 0 auto;
+  background:#0d0f17;
+}
+@media(max-width:650px){
+  .qc-root .qc-bar .qc-item.qc-plus,
+  .qc-root.qc-expanded .qc-bar .qc-item.qc-plus{
+    flex-basis:54px!important;width:54px!important;min-width:54px!important;max-width:54px!important;
+    height:54px!important;min-height:54px!important;max-height:54px!important;margin:0 3px;
+  }
+  .dm-app.dm-chat-open>.topbar{flex-basis:56px;height:56px;min-height:56px}
+  .dm-app.dm-chat-open .dm-layout{display:block;height:auto}
+  .dm-app.dm-chat-open .dm-conversation{height:100%;width:100%;border-radius:0}
+  .dm-app.dm-chat-open .dm-convo-head{flex-basis:60px;min-height:60px;height:60px;padding:0 10px}
+  .dm-app.dm-chat-open .dm-message-area{padding:12px 10px 18px}
+  .dm-app.dm-chat-open .dm-composer{padding:8px max(9px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(9px,env(safe-area-inset-left));gap:5px}
+  .dm-app.dm-chat-open .dm-composer textarea{font-size:14px;min-height:42px}
+  .dm-app.dm-chat-open .dm-composer .icon-btn{width:36px;height:40px;flex:0 0 36px}
+  .dm-app.dm-chat-open .dm-composer .primary{width:42px;height:42px;flex:0 0 42px}
+}
