@@ -85,6 +85,7 @@ export default function NearbyPage(){
  async function loadFriendRequests(){if(!db||!session)return;const {data,error}=await db.from('follows').select('follower_id,created_at').eq('following_id',session.user.id).eq('status','pending').order('created_at',{ascending:false}).limit(30);if(error)return;const ids=(data||[]).map((x:any)=>x.follower_id);if(!ids.length){IRq([]);return;}const {data:people}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);IRq((data||[]).map((x:any)=>({...x,profile:(people||[]).find((p:any)=>p.id===x.follower_id)})).filter((x:any)=>x.profile));}
  async function loadLocationRequests(){
   if(!db||!session)return;
+  await db.from('nearby_location_requests').update({status:'expired'}).eq('status','pending').lte('expires_at',new Date().toISOString()).or('sender_id.eq.'+session.user.id+',recipient_id.eq.'+session.user.id);
   const [{data:incoming},{data:outgoing}]=await Promise.all([
    db.from('nearby_location_requests').select('*').eq('recipient_id',session.user.id).eq('status','pending').order('created_at',{ascending:false}),
    db.from('nearby_location_requests').select('*').eq('sender_id',session.user.id).eq('status','pending').order('created_at',{ascending:false})
