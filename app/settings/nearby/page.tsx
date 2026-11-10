@@ -41,7 +41,7 @@ export default function NearbyPrivacySettings(){
    const isA=session.user.id<friend.id;
    const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:false}:{user_b_sharing:false}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
    if(error){N(error.message);return;}
-   await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);
+
   }
   FR(old=>old.map(x=>x.id===friend.id?{...x,sharing:enabled}:x));
   N(enabled?'Location access granted to this connection.':'Location access revoked immediately.');
