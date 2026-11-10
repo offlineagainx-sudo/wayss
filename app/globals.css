@@ -598,3 +598,31 @@ html[data-compact="true"] .setting-row{padding:9px 0}
 .profile-connection-row img,.profile-connection-row .wayss-default-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;flex:0 0 42px}
 .profile-connection-row>span{display:grid;gap:3px;min-width:0}
 .profile-connection-row small{color:var(--muted);font-size:11px}
+
+
+/* Full-width expanded WAYSS navigation */
+.qc-root.qc-expanded{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));width:auto;max-width:none;transform:none}
+.qc-root.qc-expanded .qc-bar{width:100%;max-width:none;min-width:0;box-sizing:border-box}
+@media(max-width:600px){
+ .qc-root.qc-expanded{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));width:auto}
+ .qc-root.qc-expanded .qc-bar{width:100%;max-width:none;min-height:60px;padding:6px 8px;gap:3px}
+ .qc-root.qc-expanded .qc-item{min-width:0;flex:1;padding:8px 2px}
+}
+
+/* Profile identity: keep avatar fully inside its reserved circle and place name below username */
+.profile-identity{display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto;align-items:start;column-gap:14px;row-gap:8px;margin:-45px 20px 0;padding-top:50px;min-height:150px;box-sizing:border-box}
+.profile-avatar{grid-column:1;grid-row:1;width:104px;height:104px;min-width:104px;min-height:104px;box-sizing:border-box;flex:none;margin-top:-50px;z-index:2}
+.profile-avatar>img,.profile-avatar .avatar.xl,.profile-avatar .wayss-default-avatar{width:100%!important;height:100%!important;max-width:100%;max-height:100%;object-fit:cover;border-radius:50%;display:block}
+.profile-heading{grid-column:2;grid-row:1;min-width:0;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.profile-heading p{order:0;margin:0;color:#9296A3;font-size:13px;line-height:1.35}
+.profile-heading h1{order:1;margin:0;color:#F5F5F7;font-size:24px;line-height:1.25;overflow-wrap:anywhere}
+.profile-heading small{order:2;margin-top:4px;line-height:1.4}
+.profile-identity>div:last-child{grid-column:2;grid-row:2;justify-self:start;display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:650px){
+ .profile-identity{grid-template-columns:76px minmax(0,1fr);column-gap:11px;row-gap:7px;margin:-36px 8px 0;padding-top:40px;min-height:126px}
+ .profile-avatar{width:76px;height:76px;min-width:76px;min-height:76px;margin-top:-40px}
+ .profile-heading p{font-size:11px}
+ .profile-heading h1{font-size:19px}
+ .profile-heading small{font-size:11px;margin-top:2px}
+ .profile-identity>div:last-child{grid-column:2;grid-row:2}
+}
