@@ -9,7 +9,8 @@ const filters=[
 
 export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[intensity,setIntensity]=useState(100),[busy,setBusy]=useState(false);
- const imgRef=useRef<HTMLImageElement>(null);\n const dragRef=useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
+ const imgRef=useRef<HTMLImageElement>(null);
+ const dragRef=useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
  useEffect(()=>{const u=URL.createObjectURL(file);setUrl(u);return()=>URL.revokeObjectURL(u)},[file]);
  const filter=filters[selected][1];
  const fullFilter=useMemo(()=>(filter?filter+' ':'')+'brightness('+brightness/100+') contrast('+contrast/100+')',[filter,brightness,contrast]);
