@@ -8,8 +8,8 @@ const filters=[
 ] as const;
 
 export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
- const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[busy,setBusy]=useState(false);
- const imgRef=useRef<HTMLImageElement>(null);
+ const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[busy,setBusy]=useState(false);
+ const imgRef=useRef<HTMLImageElement>(null);\n const dragRef=useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
  useEffect(()=>{const u=URL.createObjectURL(file);setUrl(u);return()=>URL.revokeObjectURL(u)},[file]);
  const filter=filters[selected][1];
  const fullFilter=useMemo(()=>filter+' brightness('+brightness/100+') contrast('+contrast/100+')',[filter,brightness,contrast]);
@@ -20,7 +20,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Photo editor is not supported on this device.');
    const scale=Math.max(w/img.naturalWidth,h/img.naturalHeight)*zoom;
-   ctx.translate(w/2,h/2);ctx.rotate(rotation*Math.PI/180);
+   const stage=document.querySelector('.photo-editor-stage') as HTMLElement|null;const ratio=w/(stage?.clientWidth||w);ctx.translate(w/2+offset.x*ratio,h/2+offset.y*ratio);ctx.rotate(rotation*Math.PI/180);
    const dw=img.naturalWidth*scale,dh=img.naturalHeight*scale;
    ctx.filter='none';ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
    ctx.globalAlpha=.0;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
@@ -32,9 +32,9 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  if(!url)return null;
  return <div className="photo-editor-backdrop" role="dialog" aria-modal="true" aria-label={mode==='avatar'?'Adjust profile picture':'Edit story photo'}>
   <section className="photo-editor">
-   <header><button type="button" onClick={onCancel} aria-label="Cancel"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" onClick={()=>{setZoom(1);setRotation(0);setSelected(0);setBrightness(100);setContrast(100)}}>Reset</button></header>
-   <div className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')}>
-    <img ref={imgRef} src={url} alt="Image preview" style={{transform:'scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter}}/>
+   <header><button type="button" onClick={onCancel} aria-label="Cancel"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" onClick={()=>{setZoom(1);setRotation(0);setOffset({x:0,y:0});setSelected(0);setBrightness(100);setContrast(100)}}>Reset</button></header>
+   <div className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')} onPointerDown={e=>{dragRef.current={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={e=>{if(dragRef.current)setOffset({x:dragRef.current.ox+e.clientX-dragRef.current.x,y:dragRef.current.oy+e.clientY-dragRef.current.y});}} onPointerUp={()=>{dragRef.current=null;}} onPointerCancel={()=>{dragRef.current=null;}}>
+    <img ref={imgRef} src={url} alt="Image preview" style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter}}/>
    </div>
    <div className="photo-editor-tools">
     <label>Zoom <input type="range" min="1" max="3" step=".01" value={zoom} onChange={e=>setZoom(Number(e.target.value))}/></label>
