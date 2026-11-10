@@ -747,3 +747,39 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
   .dm-app.dm-chat-open .dm-composer .icon-btn{width:36px;height:40px;flex:0 0 36px}
   .dm-app.dm-chat-open .dm-composer .primary{width:42px;height:42px;flex:0 0 42px}
 }
+
+
+/* Conversation view mirrors a dedicated messaging app screen */
+.dm-app.dm-chat-open{padding:0!important;overflow:hidden!important}
+.dm-app.dm-chat-open>.topbar{display:none!important}
+.dm-app.dm-chat-open .dm-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  flex:1 1 0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  margin:0!important;
+  padding:0!important;
+  gap:0!important;
+}
+.dm-app.dm-chat-open .dm-conversation{
+  grid-column:1;
+  grid-row:1;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:100%!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#090a10;
+}
+.dm-app.dm-chat-open .dm-convo-head{border-radius:0;border-top:0}
+.dm-app.dm-chat-open .dm-message-area{width:100%;box-sizing:border-box}
+.dm-app.dm-chat-open .dm-composer{width:100%;box-sizing:border-box}
+@media(max-width:650px){
+ .dm-app.dm-chat-open .dm-layout{display:grid!important;grid-template-rows:minmax(0,1fr)!important}
+ .dm-app.dm-chat-open .dm-conversation{height:100dvh!important}
+}
