@@ -34,13 +34,13 @@ export default function NearbyPrivacySettings(){
   if(enabled){
    const {error:prefError}=await db.from('nearby_preferences').upsert({user_id:session.user.id,location_sharing_enabled:true,ghost_mode:false,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});if(prefError){N(prefError.message);return;}SH(true);GH(false);
    const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();
-   const {error}=await db.from('nearby_location_connections').update(friend.id===friend.id?{user_a_sharing:true}:{}).eq('user_a',session.user.id).eq('user_b',friend.id);
-   const {error:otherError}=await db.from('nearby_location_connections').update({user_b_sharing:true}).eq('user_b',session.user.id).eq('user_a',friend.id);
-   if(error||otherError){N((error||otherError)?.message||'Could not enable sharing');return;}
+   const isA=session.user.id<friend.id;
+   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:true}:{user_b_sharing:true}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
+   if(error){N(error.message);return;}
   }else{
-   const {error}=await db.from('nearby_location_connections').update({user_a_sharing:false}).eq('user_a',session.user.id).eq('user_b',friend.id);
-   const {error:otherError}=await db.from('nearby_location_connections').update({user_b_sharing:false}).eq('user_b',session.user.id).eq('user_a',friend.id);
-   if(error||otherError){N((error||otherError)?.message||'Could not pause sharing');return;}
+   const isA=session.user.id<friend.id;
+   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:false}:{user_b_sharing:false}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
+   if(error){N(error.message);return;}
    await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);
   }
   FR(old=>old.map(x=>x.id===friend.id?{...x,sharing:enabled}:x));
