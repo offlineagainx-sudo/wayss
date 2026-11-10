@@ -15,9 +15,9 @@ export default function NearbyPrivacySettings(){
   const {data:p,error}=await db.from('nearby_preferences').select('allow_on_demand_location,location_sharing_enabled,ghost_mode,location_share_duration_minutes').eq('user_id',uid).maybeSingle();
   if(error){N(error.message);return;}
   A(!!p?.allow_on_demand_location);SH(!!p?.location_sharing_enabled);GH(p?.ghost_mode!==false);DU(String(p?.location_share_duration_minutes??60));
-  const {data:connections, error:connectionError}=await db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,expires_at').or('user_a.eq.'+uid+',user_b.eq.'+uid);
+  const {data:connections, error:connectionError}=await db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,user_a_expires_at,user_b_expires_at').or('user_a.eq.'+uid+',user_b.eq.'+uid);
   if(connectionError){N(connectionError.message);FR([]);return;}
-  const rows=(connections||[]).filter((x:any)=>!x.expires_at||new Date(x.expires_at).getTime()>Date.now());
+  const rows=(connections||[]).filter((x:any)=>{const expiry=x.user_a===uid?x.user_a_expires_at:x.user_b_expires_at;return !expiry||new Date(expiry).getTime()>Date.now();});
   const mutual=rows.map((x:any)=>x.user_a===uid?x.user_b:x.user_a);
   if(!mutual.length){FR([]);return;}
   const {data:people}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',mutual);
@@ -26,7 +26,7 @@ export default function NearbyPrivacySettings(){
  async function save(){
   if(!db||!session)return;B(true);
   const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});
-  if(!error){const enabled=sharing&&!ghost;const [{error:ua},{error:ub}]=await Promise.all([db.from('nearby_location_connections').update({user_a_sharing:enabled}).eq('user_a',session.user.id),db.from('nearby_location_connections').update({user_b_sharing:enabled}).eq('user_b',session.user.id)]);if(ua||ub)N((ua||ub)?.message||'Could not update connection sharing.');if(!enabled)await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
+  if(!error){const enabled=sharing&&!ghost,expiry=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();const [{error:ua},{error:ub}]=await Promise.all([db.from('nearby_location_connections').update({user_a_sharing:enabled,user_a_expires_at:expiry}).eq('user_a',session.user.id),db.from('nearby_location_connections').update({user_b_sharing:enabled,user_b_expires_at:expiry}).eq('user_b',session.user.id)]);if(ua||ub)N((ua||ub)?.message||'Could not update connection sharing.');if(!enabled)await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
   N(error?.message||'Nearby privacy settings saved.');B(false);if(!error)await load(session.user.id);
  }
  async function toggleFriend(friend:Friend,enabled:boolean){
@@ -35,11 +35,11 @@ export default function NearbyPrivacySettings(){
    const {error:prefError}=await db.from('nearby_preferences').upsert({user_id:session.user.id,location_sharing_enabled:true,ghost_mode:false,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});if(prefError){N(prefError.message);return;}SH(true);GH(false);
    const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();
    const isA=session.user.id<friend.id;
-   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:true}:{user_b_sharing:true}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
+   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:true,user_a_expires_at:expires}:{user_b_sharing:true,user_b_expires_at:expires}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
    if(error){N(error.message);return;}
   }else{
    const isA=session.user.id<friend.id;
-   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:false}:{user_b_sharing:false}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
+   const {error}=await db.from('nearby_location_connections').update(isA?{user_a_sharing:false,user_a_expires_at:null}:{user_b_sharing:false,user_b_expires_at:null}).eq('user_a',isA?session.user.id:friend.id).eq('user_b',isA?friend.id:session.user.id);
    if(error){N(error.message);return;}
 
   }
