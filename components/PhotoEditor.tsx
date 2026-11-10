@@ -33,7 +33,8 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
   <section className="photo-editor">
    <header><button type="button" onClick={onCancel} aria-label="Cancel"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" onClick={()=>{setZoom(1);setRotation(0);setOffset({x:0,y:0});setSelected(0);setBrightness(100);setContrast(100);setIntensity(100)}}>Reset</button></header>
    <div className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')} onPointerDown={e=>{dragRef.current={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={e=>{if(dragRef.current)setOffset({x:dragRef.current.ox+e.clientX-dragRef.current.x,y:dragRef.current.oy+e.clientY-dragRef.current.y});}} onPointerUp={()=>{dragRef.current=null;}} onPointerCancel={()=>{dragRef.current=null;}}>
-    <img ref={imgRef} src={url} alt="Image preview" style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter}}/>
+    <img ref={imgRef} src={url} alt="Image preview" style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)'}}/>
+    <img src={url} alt="" aria-hidden="true" style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter,opacity:intensity/100,pointerEvents:'none'}}/>
    </div>
    <div className="photo-editor-tools">
     <label>Zoom <input type="range" min="1" max="3" step=".01" value={zoom} onChange={e=>setZoom(Number(e.target.value))}/></label>
@@ -49,9 +50,9 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    .photo-editor-backdrop{position:fixed;inset:0;z-index:3000;background:#05060beF;display:grid;place-items:center;padding:12px}
    .photo-editor{width:min(100%,620px);max-height:94dvh;overflow:auto;border:1px solid #30313d;border-radius:20px;background:#101116;color:#f5f5f7;padding:14px;display:grid;gap:13px}
    header,footer{display:flex;align-items:center;justify-content:space-between;gap:10px}header button{border:0;background:transparent;color:#f5f5f7;padding:8px}header b{font-size:14px}header button:last-child{font-size:11px;color:#ff8199}
-   .photo-editor-stage{margin:auto;overflow:hidden;background:#08090d;display:grid;place-items:center;border-radius:12px;width:min(100%,380px);touch-action:pan-y}
+   .photo-editor-stage{position:relative;margin:auto;overflow:hidden;background:#08090d;display:grid;place-items:center;border-radius:12px;width:min(100%,380px);touch-action:pan-y}
    .avatar-stage{aspect-ratio:1;border-radius:50%;width:min(76vw,340px)}.story-stage{aspect-ratio:9/16;width:min(62vw,300px);max-height:48dvh}
-   .photo-editor-stage img{width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform}
+   .photo-editor-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform}
    .photo-editor-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.photo-editor-tools label{display:grid;gap:5px;color:#aeb2bf;font-size:10px}.photo-editor-tools input{width:100%;accent-color:#f32950}.photo-editor-rotate{align-self:end;display:flex;justify-content:center;align-items:center;gap:7px;min-height:32px;border:1px solid #30313d;border-radius:9px;background:#17181f;color:#eee;font-size:11px}
    .photo-filter-strip{display:flex;gap:9px;overflow-x:auto;padding:2px 0 7px}.photo-filter-strip button{flex:0 0 62px;border:0;background:transparent;color:#9da1af;padding:2px}.photo-filter-thumb{display:block;width:56px;height:56px;border:2px solid transparent;border-radius:10px;overflow:hidden}.photo-filter-strip button.active .photo-filter-thumb{border-color:#f32950}.photo-filter-thumb img{width:100%;height:100%;object-fit:cover}.photo-filter-strip small{display:block;margin-top:5px;font-size:9px;white-space:nowrap}
    footer{padding-top:4px}footer button{min-height:40px;display:flex;align-items:center;gap:7px}
