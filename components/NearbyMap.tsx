@@ -2,7 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 type EventPoint={id:string;title:string;latitude:number;longitude:number;category:string};
 type PlacePoint={id:string;name:string;lat:number;lon:number;category:string};
-export type NearbyPersonPoint={id:string;username:string;display_name:string;avatar_url:string|null;latitude:number;longitude:number;updated_at:string;is_self?:boolean};
+export type NearbyPersonPoint={id:string;username:string;display_name:string;avatar_url:string|null;latitude:number;longitude:number;updated_at:string;speed_mps?:number|null;is_self?:boolean};
 type Props={events:EventPoint[];places:PlacePoint[];people?:NearbyPersonPoint[];onEvent:(id:string)=>void;onPlace:(id:string)=>void;onPerson?:(id:string)=>void;center?:[number,number]|null;centerVersion?:number;pickMode?:boolean;onMapPick?:(point:{lat:number;lon:number})=>void;styleMode?:'dark'|'standard'|'satellite'};
 export default function NearbyMap({events,places,people=[],onEvent,onPlace,onPerson,center,centerVersion=0,pickMode=false,onMapPick,styleMode='dark'}:Props){
  const node=useRef<HTMLDivElement>(null),map=useRef<any>(null),markers=useRef<any[]>([]),callbacks=useRef({onEvent,onPlace,onMapPick,onPerson,pickMode}),[mapReady,MR]=useState(false),[mapError,ME]=useState('');
