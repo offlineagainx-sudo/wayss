@@ -9,12 +9,12 @@ const db=supabase();
 type Friend={id:string;username:string;display_name:string;avatar_url:string|null;sharing:boolean};
 export default function NearbyPrivacySettings(){
  const router=useRouter();
- const [session,S]=useState<any>(null),[allow,A]=useState(false),[sharing,SH]=useState(false),[ghost,GH]=useState(true),[duration,DU]=useState('60'),[friends,FR]=useState<Friend[]>([]),[busy,B]=useState(false),[notice,N]=useState('');
+ const [session,S]=useState<any>(null),[allow,A]=useState(false),[sharing,SH]=useState(false),[ghost,GH]=useState(true),[duration,DU]=useState('60'),[arrival,ARR]=useState(false),[departure,DEP]=useState(false),[friends,FR]=useState<Friend[]>([]),[busy,B]=useState(false),[notice,N]=useState('');
  useEffect(()=>{if(!db)return;let alive=true;db.auth.getSession().then(async({data}:any)=>{if(!alive)return;S(data.session);if(data.session)await load(data.session.user.id);});const {data:{subscription}}=db.auth.onAuthStateChange((_e:string,s:any)=>{S(s);if(s)void load(s.user.id)});return()=>{alive=false;subscription.unsubscribe();};},[]);
  async function load(uid:string){
-  const {data:p,error}=await db.from('nearby_preferences').select('allow_on_demand_location,location_sharing_enabled,ghost_mode,location_share_duration_minutes').eq('user_id',uid).maybeSingle();
+  const {data:p,error}=await db.from('nearby_preferences').select('allow_on_demand_location,location_sharing_enabled,ghost_mode,location_share_duration_minutes,arrival_notifications,departure_notifications').eq('user_id',uid).maybeSingle();
   if(error){N(error.message);return;}
-  A(!!p?.allow_on_demand_location);SH(!!p?.location_sharing_enabled);GH(p?.ghost_mode!==false);DU(String(p?.location_share_duration_minutes??60));
+  A(!!p?.allow_on_demand_location);SH(!!p?.location_sharing_enabled);GH(p?.ghost_mode!==false);DU(String(p?.location_share_duration_minutes??60));ARR(!!p?.arrival_notifications);DEP(!!p?.departure_notifications);
   const {data:connections, error:connectionError}=await db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,user_a_expires_at,user_b_expires_at').or('user_a.eq.'+uid+',user_b.eq.'+uid);
   if(connectionError){N(connectionError.message);FR([]);return;}
   const rows=(connections||[]).filter((x:any)=>{const expiry=x.user_a===uid?x.user_a_expires_at:x.user_b_expires_at;return !expiry||new Date(expiry).getTime()>Date.now();});
@@ -25,7 +25,7 @@ export default function NearbyPrivacySettings(){
  }
  async function save(){
   if(!db||!session)return;B(true);N('');
-  const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});
+  const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),arrival_notifications:arrival,departure_notifications:departure,updated_at:new Date().toISOString()});
   if(error){N(error.message);B(false);return;}
   if(!sharing||ghost){
    const {error:stopError}=await db.rpc('set_nearby_location_sharing',{p_enabled:false,p_expires_at:null,p_connection_id:null});
@@ -63,6 +63,7 @@ export default function NearbyPrivacySettings(){
  <section className="panel settings-card"><h3><Users/> Choose who can see your location</h3><p className="muted">Only mutual accepted connections appear here. Turn on sharing and switch on individual people. You can revoke access at any time.</p>
  {friends.length?friends.map(friend=><label className="setting-row" key={friend.id}><span><b>{friend.display_name||'WAYSS member'}</b><small>@{friend.username}</small></span><ToggleSwitch checked={friend.sharing} onChange={v=>void toggleFriend(friend,v)} label={'Share location with @'+friend.username}/></label>):<p className="nearby-empty">No mutual connections yet. Location sharing will remain private.</p>}
  </section>
+ <section className="panel settings-card"><h3><LocateFixed/> Saved place alerts</h3><p className="muted">Optional arrival and departure alerts for places you saved. WAYSS checks your location only while Nearby is open; it does not run background tracking.</p><label className="setting-row"><span><b>Arrival notifications</b><small>Notify me when I reach a saved place (about 150 m).</small></span><ToggleSwitch checked={arrival} onChange={ARR} label="Arrival notifications"/></label><label className="setting-row"><span><b>Departure notifications</b><small>Notify me when I leave a saved place.</small></span><ToggleSwitch checked={departure} onChange={DEP} label="Departure notifications"/></label></section>
  <section className="panel settings-card"><h3><ShieldCheck/> Privacy promise</h3><ul className="nearby-privacy-list"><li>Location sharing is OFF by default.</li><li>Ghost Mode hides your location from all connections.</li><li>Strangers and one-way follows cannot see precise location.</li><li>Blocked accounts are excluded both ways.</li><li>No secret tracking or public GPS coordinates.</li></ul></section>
  {notice&&<p className="notice">{notice}</p>}<button className="primary" disabled={busy} onClick={save}><Save size={16}/>{busy?'Saving…':'Save privacy settings'}</button>
  <p className="muted">Background location is not enabled on the web. An Android app would need a separate, visible foreground-service permission flow and OS-level testing.</p>
