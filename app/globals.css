@@ -828,3 +828,25 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 }
 
 .nearby-map-cluster{width:42px;height:42px;border:2px solid #f5f5f7;border-radius:50%;background:#f32950;color:#fff;font-size:13px;font-weight:750;box-shadow:0 5px 18px #0009;cursor:pointer}.nearby-map-cluster:hover{transform:scale(1.08)}
+/* WAYSS Nearby Map Studio */
+.nearby-map-studio{position:absolute;z-index:22;right:62px;top:12px;width:min(310px,calc(100vw - 92px));max-height:min(72dvh,560px);overflow:auto;padding:13px;border:1px solid #343642;border-radius:16px;background:#101116f5;box-shadow:0 18px 48px #000b;backdrop-filter:blur(18px)}
+.nearby-studio-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;color:#f5f5f7;font-size:13px}
+.nearby-studio-head button{width:30px;height:30px;display:grid;place-items:center;border:1px solid #30313d;border-radius:9px;background:#17181f;color:#c5c8d2}
+.nearby-theme-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.nearby-theme-grid button{min-width:0;display:grid;gap:5px;padding:5px 3px;border:1px solid #292b35;border-radius:10px;background:#14151c;color:#bfc2cc}
+.nearby-theme-grid button.selected{border-color:#f32950;background:#f3295018;color:#fff}
+.nearby-theme-grid small{font-size:8px;line-height:1.2;text-align:center}
+.nearby-theme-swatch{height:34px;width:100%;border-radius:6px;background:linear-gradient(135deg,#192c40,#090b10)}
+.nearby-theme-swatch.theme-default{background:linear-gradient(135deg,#dce3e8,#7d8993)}
+.nearby-theme-swatch.theme-dark{background:linear-gradient(135deg,#252b31,#090b10)}
+.nearby-theme-swatch.theme-satellite{background:linear-gradient(135deg,#5c7454,#1e3028)}
+.nearby-theme-swatch.theme-terrain{background:linear-gradient(135deg,#b4aa7c,#4b7757)}
+.nearby-theme-swatch.theme-minimal{background:linear-gradient(135deg,#eee,#aeb8c0)}
+.nearby-theme-swatch.theme-midnight{background:linear-gradient(135deg,#1a3551,#080f1b)}
+.nearby-theme-swatch.theme-rose{background:linear-gradient(135deg,#71304b,#130b13)}
+.nearby-theme-swatch.theme-mono{background:linear-gradient(135deg,#777,#111)}
+.nearby-layer-list{display:grid;gap:2px;margin-top:12px;padding-top:9px;border-top:1px solid #292b35}
+.nearby-layer-list label{display:flex;align-items:center;justify-content:space-between;padding:7px 2px;color:#d9dbe2;font-size:10px}
+.nearby-layer-list input{accent-color:#f32950}
+.nearby-studio-note{display:block;margin-top:9px;color:#777d8b;font-size:9px;line-height:1.5}
+@media(max-width:650px){.nearby-map-studio{right:56px;top:8px;width:min(300px,calc(100vw - 78px));padding:11px}.nearby-theme-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
