@@ -30,7 +30,7 @@ export default function NearbyPrivacySettings(){
  async function save(){
   if(!db||!session)return;B(true);
   const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});
-  if(!error){const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();await db.from('nearby_location_shares').update({expires_at:expires}).eq('owner_id',session.user.id);if(!sharing||ghost)await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
+  if(!error){const enabled=sharing&&!ghost;const [{error:ua},{error:ub}]=await Promise.all([db.from('nearby_location_connections').update({user_a_sharing:enabled}).eq('user_a',session.user.id),db.from('nearby_location_connections').update({user_b_sharing:enabled}).eq('user_b',session.user.id)]);if(ua||ub)N((ua||ub)?.message||'Could not update connection sharing.');if(!enabled)await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
   N(error?.message||'Nearby privacy settings saved.');B(false);if(!error)await load(session.user.id);
  }
  async function toggleFriend(friend:Friend,enabled:boolean){
