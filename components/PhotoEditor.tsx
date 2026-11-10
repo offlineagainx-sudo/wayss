@@ -21,7 +21,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Photo editor is not supported on this device.');
    const scale=Math.max(w/img.naturalWidth,h/img.naturalHeight)*zoom;
-   const stage=document.querySelector('.photo-editor-stage') as HTMLElement|null;const ratio=w/(stage?.clientWidth||w);ctx.translate(w/2+offset.x*ratio,h/2+offset.y*ratio);ctx.rotate(rotation*Math.PI/180);
+   const stage=document.querySelector('.photo-editor-stage') as HTMLElement|null;const ratioX=w/(stage?.clientWidth||w),ratioY=h/(stage?.clientHeight||h);ctx.translate(w/2+offset.x*ratioX,h/2+offset.y*ratioY);ctx.rotate(rotation*Math.PI/180);
    const dw=img.naturalWidth*scale,dh=img.naturalHeight*scale;
    ctx.filter='none';ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
    ctx.globalAlpha=intensity/100;ctx.filter=fullFilter;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.globalAlpha=1;ctx.filter='none';
@@ -51,7 +51,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    .photo-editor-backdrop{position:fixed;inset:0;z-index:3000;background:#05060beF;display:grid;place-items:center;padding:12px}
    .photo-editor{width:min(100%,620px);max-height:94dvh;overflow:auto;border:1px solid #30313d;border-radius:20px;background:#101116;color:#f5f5f7;padding:14px;display:grid;gap:13px}
    header,footer{display:flex;align-items:center;justify-content:space-between;gap:10px}header button{border:0;background:transparent;color:#f5f5f7;padding:8px}header b{font-size:14px}header button:last-child{font-size:11px;color:#ff8199}
-   .photo-editor-stage{position:relative;margin:auto;overflow:hidden;background:#08090d;display:grid;place-items:center;border-radius:12px;width:min(100%,380px);touch-action:pan-y}
+   .photo-editor-stage{position:relative;margin:auto;overflow:hidden;background:#08090d;display:grid;place-items:center;border-radius:12px;width:min(100%,380px);touch-action:none}
    .avatar-stage{aspect-ratio:1;border-radius:50%;width:min(76vw,340px)}.story-stage{aspect-ratio:9/16;width:min(62vw,300px);max-height:48dvh}
    .photo-editor-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:center;will-change:transform}
    .photo-editor-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.photo-editor-tools label{display:grid;gap:5px;color:#aeb2bf;font-size:10px}.photo-editor-tools input{width:100%;accent-color:#f32950}.photo-editor-rotate{align-self:end;display:flex;justify-content:center;align-items:center;gap:7px;min-height:32px;border:1px solid #30313d;border-radius:9px;background:#17181f;color:#eee;font-size:11px}
