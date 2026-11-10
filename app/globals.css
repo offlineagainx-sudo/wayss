@@ -785,3 +785,14 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 }
 
 .dm-context-menu{position:absolute;z-index:35;top:8px;right:8px;min-width:150px;display:flex;flex-direction:column;gap:3px;padding:7px;border:1px solid #343744;border-radius:13px;background:#17181f;box-shadow:0 14px 38px #0009}.dm-context-menu button{border:0;background:transparent;color:#f5f5f7;text-align:left;padding:9px 11px;border-radius:8px;font:inherit;font-size:13px}.dm-context-menu button:hover{background:#262832}.dm-context-menu button.danger{color:#ff6680}.dm-bubble{position:relative}
+
+/* HUSH: message actions are contextual, never permanently visible on hover. */
+.dm-hover-actions{display:none!important}
+.dm-context-menu{position:absolute;z-index:50;top:8px;right:8px;min-width:168px;max-width:min(82vw,240px);padding:7px;display:flex;flex-direction:column;gap:2px;border:1px solid #343744;border-radius:14px;background:#17181f;box-shadow:0 16px 42px #000b}
+.dm-context-menu button{width:100%;border:0;background:transparent;color:#f5f5f7;text-align:left;padding:10px 12px;border-radius:9px;font:inherit;font-size:13px}
+.dm-context-menu button:hover{background:#262832}
+.dm-context-menu button.danger{color:#ff6680}
+.dm-bubble{position:relative;touch-action:pan-y;user-select:text}
+.dm-voice-hold{touch-action:none;user-select:none}
+.dm-voice-hold.recording{color:#F32950;background:#F3295020;animation:dm-record-pulse 1s ease-in-out infinite}
+@keyframes dm-record-pulse{50%{transform:scale(1.08);opacity:.75}}
