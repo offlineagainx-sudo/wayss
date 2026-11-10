@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useMemo,useRef,useState} from 'react';
+import {useEffect,useMemo,useRef,useState,type PointerEvent as ReactPointerEvent} from 'react';
 import {Check,RotateCw,X,Type,SlidersHorizontal} from 'lucide-react';
 
 type Props={file:File;mode:'avatar'|'story';onCancel:()=>void;onApply:(file:File)=>void};
@@ -17,7 +17,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  const fullFilter=useMemo(()=>(filter?filter+' ':'')+'brightness('+brightness/100+') contrast('+contrast/100+')',[filter,brightness,contrast]);
  function distance(a:Point,b:Point){return Math.hypot(a.x-b.x,a.y-b.y)}
  function midpoint(a:Point,b:Point):Point{return{x:(a.x+b.x)/2,y:(a.y+b.y)/2}}
- function pointerDown(e:React.PointerEvent<HTMLDivElement>){
+ function pointerDown(e:ReactPointerEvent<HTMLDivElement>){
   e.currentTarget.setPointerCapture(e.pointerId);
   const rect=e.currentTarget.getBoundingClientRect();const p={x:e.clientX-rect.left,y:e.clientY-rect.top};
   pointers.current.set(e.pointerId,p);
