@@ -30,12 +30,13 @@ export default function NearbyPrivacySettings(){
  async function save(){
   if(!db||!session)return;B(true);
   const {error}=await db.from('nearby_preferences').upsert({user_id:session.user.id,allow_on_demand_location:allow,location_sharing_enabled:sharing,ghost_mode:ghost,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});
-  if(!error&&!sharing){await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
+  if(!error){const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();await db.from('nearby_location_shares').update({expires_at:expires}).eq('owner_id',session.user.id);if(!sharing||ghost)await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);}
   N(error?.message||'Nearby privacy settings saved.');B(false);if(!error)await load(session.user.id);
  }
  async function toggleFriend(friend:Friend,enabled:boolean){
   if(!db||!session)return;
   if(enabled){
+   const {error:prefError}=await db.from('nearby_preferences').upsert({user_id:session.user.id,location_sharing_enabled:true,ghost_mode:false,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});if(prefError){N(prefError.message);return;}SH(true);GH(false);
    const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();
    const {error}=await db.from('nearby_location_shares').upsert({owner_id:session.user.id,friend_id:friend.id,expires_at:expires},{onConflict:'owner_id,friend_id'});
    if(error){N(error.message);return;}
