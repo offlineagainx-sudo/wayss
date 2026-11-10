@@ -15,17 +15,13 @@ export default function NearbyPrivacySettings(){
   const {data:p,error}=await db.from('nearby_preferences').select('allow_on_demand_location,location_sharing_enabled,ghost_mode,location_share_duration_minutes').eq('user_id',uid).maybeSingle();
   if(error){N(error.message);return;}
   A(!!p?.allow_on_demand_location);SH(!!p?.location_sharing_enabled);GH(p?.ghost_mode!==false);DU(String(p?.location_share_duration_minutes??60));
-  const {data:out}=await db.from('follows').select('follower_id,following_id').eq('follower_id',uid).eq('status','accepted');
-  const {data:incoming}=await db.from('follows').select('follower_id,following_id').eq('following_id',uid).eq('status','accepted');
-  const outgoing=new Set((out||[]).map((x:any)=>x.following_id));
-  const mutual=(incoming||[]).map((x:any)=>x.follower_id).filter((id:string)=>outgoing.has(id));
+  const {data:connections, error:connectionError}=await db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,expires_at').or('user_a.eq.'+uid+',user_b.eq.'+uid);
+  if(connectionError){N(connectionError.message);FR([]);return;}
+  const rows=(connections||[]).filter((x:any)=>!x.expires_at||new Date(x.expires_at).getTime()>Date.now());
+  const mutual=rows.map((x:any)=>x.user_a===uid?x.user_b:x.user_a);
   if(!mutual.length){FR([]);return;}
-  const [{data:people},{data:shares}]=await Promise.all([
-   db.from('profiles').select('id,username,display_name,avatar_url').in('id',mutual),
-   db.from('nearby_location_shares').select('friend_id,expires_at').eq('owner_id',uid)
-  ]);
-  const now=Date.now(),active=new Set((shares||[]).filter((x:any)=>!x.expires_at||new Date(x.expires_at).getTime()>now).map((x:any)=>x.friend_id));
-  FR((people||[]).map((x:any)=>({...x,sharing:active.has(x.id)})));
+  const {data:people}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',mutual);
+  FR((people||[]).map((x:any)=>{const row=rows.find((v:any)=>v.user_a===uid?v.user_b===x.id:v.user_a===x.id);return {...x,sharing:row?(row.user_a===uid?row.user_a_sharing:row.user_b_sharing):false};}));
  }
  async function save(){
   if(!db||!session)return;B(true);
@@ -38,11 +34,14 @@ export default function NearbyPrivacySettings(){
   if(enabled){
    const {error:prefError}=await db.from('nearby_preferences').upsert({user_id:session.user.id,location_sharing_enabled:true,ghost_mode:false,location_share_duration_minutes:Number(duration),updated_at:new Date().toISOString()});if(prefError){N(prefError.message);return;}SH(true);GH(false);
    const expires=Number(duration)===0?null:new Date(Date.now()+Number(duration)*60000).toISOString();
-   const {error}=await db.from('nearby_location_shares').upsert({owner_id:session.user.id,friend_id:friend.id,expires_at:expires},{onConflict:'owner_id,friend_id'});
-   if(error){N(error.message);return;}
+   const {error}=await db.from('nearby_location_connections').update(friend.id===friend.id?{user_a_sharing:true}:{}).eq('user_a',session.user.id).eq('user_b',friend.id);
+   const {error:otherError}=await db.from('nearby_location_connections').update({user_b_sharing:true}).eq('user_b',session.user.id).eq('user_a',friend.id);
+   if(error||otherError){N((error||otherError)?.message||'Could not enable sharing');return;}
   }else{
-   const {error}=await db.from('nearby_location_shares').delete().eq('owner_id',session.user.id).eq('friend_id',friend.id);
-   if(error){N(error.message);return;}
+   const {error}=await db.from('nearby_location_connections').update({user_a_sharing:false}).eq('user_a',session.user.id).eq('user_b',friend.id);
+   const {error:otherError}=await db.from('nearby_location_connections').update({user_b_sharing:false}).eq('user_b',session.user.id).eq('user_a',friend.id);
+   if(error||otherError){N((error||otherError)?.message||'Could not pause sharing');return;}
+   await db.from('nearby_live_locations').delete().eq('user_id',session.user.id);
   }
   FR(old=>old.map(x=>x.id===friend.id?{...x,sharing:enabled}:x));
   N(enabled?'Location access granted to this connection.':'Location access revoked immediately.');
