@@ -78,7 +78,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    .story-stage{width:min(76vw,360px);height:min(65dvh,640px);aspect-ratio:9/16;border-radius:12px}
    .photo-editor-stage>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:center;pointer-events:none;will-change:transform}
    .avatar-crop-guide{position:absolute;inset:0;pointer-events:none;display:grid;place-items:center}
-   .avatar-crop-guide span{width:86%;height:86%;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 999px rgba(0,0,0,.62),0 0 18px #0008}
+   .avatar-crop-guide span{width:100%;height:100%;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 999px rgba(0,0,0,.62),0 0 18px #0008}
    .gesture-hint{text-align:center;color:#b6b9c4;font-size:11px;letter-spacing:.1px}
    .avatar-actions{display:flex;justify-content:center;gap:14px;padding:10px}.avatar-actions button{display:flex;align-items:center;gap:7px;color:#f5f5f7;background:#191b23;border:1px solid #343744;border-radius:20px;padding:10px 16px;font-size:12px}
    .story-tools{display:flex;align-items:center;justify-content:space-around;gap:10px;padding:8px 0}.story-tools>button,.story-tools>label{display:flex;flex-direction:column;align-items:center;gap:5px;background:transparent;border:0;color:#fff;font-size:10px}.story-tools label input{width:100px;background:#17181f;border:1px solid #343744;color:white;border-radius:8px;padding:6px}
