@@ -8,7 +8,7 @@ const filters=[
 ] as const;
 
 export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
- const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[busy,setBusy]=useState(false);
+ const [url,setUrl]=useState(''),[selected,setSelected]=useState(0),[zoom,setZoom]=useState(1),[rotation,setRotation]=useState(0),[offset,setOffset]=useState({x:0,y:0}),[brightness,setBrightness]=useState(100),[contrast,setContrast]=useState(100),[intensity,setIntensity]=useState(100),[busy,setBusy]=useState(false);
  const imgRef=useRef<HTMLImageElement>(null);\n const dragRef=useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
  useEffect(()=>{const u=URL.createObjectURL(file);setUrl(u);return()=>URL.revokeObjectURL(u)},[file]);
  const filter=filters[selected][1];
@@ -23,8 +23,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    const stage=document.querySelector('.photo-editor-stage') as HTMLElement|null;const ratio=w/(stage?.clientWidth||w);ctx.translate(w/2+offset.x*ratio,h/2+offset.y*ratio);ctx.rotate(rotation*Math.PI/180);
    const dw=img.naturalWidth*scale,dh=img.naturalHeight*scale;
    ctx.filter='none';ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
-   ctx.globalAlpha=.0;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);
-   ctx.globalAlpha=1;ctx.filter=fullFilter;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.filter='none';
+   ctx.globalAlpha=intensity/100;ctx.filter=fullFilter;ctx.drawImage(img,-dw/2,-dh/2,dw,dh);ctx.globalAlpha=1;ctx.filter='none';
    const blob=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Could not process this image.')),'image/jpeg',.94));
    onApply(new File([blob],(file.name.replace(/\.[^.]+$/,'')||'wayss-image')+'-edited.jpg',{type:'image/jpeg'}));
   }catch(e:any){alert(e.message||'Could not edit image.')}finally{setBusy(false)}
@@ -32,7 +31,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
  if(!url)return null;
  return <div className="photo-editor-backdrop" role="dialog" aria-modal="true" aria-label={mode==='avatar'?'Adjust profile picture':'Edit story photo'}>
   <section className="photo-editor">
-   <header><button type="button" onClick={onCancel} aria-label="Cancel"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" onClick={()=>{setZoom(1);setRotation(0);setOffset({x:0,y:0});setSelected(0);setBrightness(100);setContrast(100)}}>Reset</button></header>
+   <header><button type="button" onClick={onCancel} aria-label="Cancel"><X/></button><b>{mode==='avatar'?'Adjust profile picture':'Edit story'}</b><button type="button" onClick={()=>{setZoom(1);setRotation(0);setOffset({x:0,y:0});setSelected(0);setBrightness(100);setContrast(100);setIntensity(100)}}>Reset</button></header>
    <div className={'photo-editor-stage '+(mode==='avatar'?'avatar-stage':'story-stage')} onPointerDown={e=>{dragRef.current={x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={e=>{if(dragRef.current)setOffset({x:dragRef.current.ox+e.clientX-dragRef.current.x,y:dragRef.current.oy+e.clientY-dragRef.current.y});}} onPointerUp={()=>{dragRef.current=null;}} onPointerCancel={()=>{dragRef.current=null;}}>
     <img ref={imgRef} src={url} alt="Image preview" style={{transform:'translate('+offset.x+'px,'+offset.y+'px) scale('+zoom+') rotate('+rotation+'deg)',filter:fullFilter}}/>
    </div>
@@ -41,6 +40,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
     <button type="button" className="photo-editor-rotate" onClick={()=>setRotation(v=>(v+90)%360)}><RotateCw size={16}/> Rotate</button>
     <label>Brightness <input type="range" min="50" max="150" value={brightness} onChange={e=>setBrightness(Number(e.target.value))}/></label>
     <label>Contrast <input type="range" min="50" max="150" value={contrast} onChange={e=>setContrast(Number(e.target.value))}/></label>
+    {mode==='story'&&<label>Filter intensity · {intensity}% <input type="range" min="0" max="100" value={intensity} onChange={e=>setIntensity(Number(e.target.value))}/></label>}
    </div>
    {mode==='story'&&<div className="photo-filter-strip">{filters.map(([name],i)=><button type="button" key={name} className={selected===i?'active':''} onClick={()=>setSelected(i)}><span className="photo-filter-thumb"><img src={url} alt="" style={{filter:filters[i][1]}}/></span><small>{name}</small></button>)}</div>}
    <footer><button type="button" className="secondary-action" onClick={onCancel}>Cancel</button><button type="button" className="primary" onClick={()=>void apply()} disabled={busy}>{busy?'Applying…':<><Check size={16}/> Use photo</>}</button></footer>
