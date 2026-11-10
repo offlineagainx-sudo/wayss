@@ -17,12 +17,12 @@ export default function NearbyPage(){
  useEffect(()=>{if(!session)return;void loadEvents();void loadSaved();void loadInvites();void loadActivity();void loadFriendRequests();try{RS(JSON.parse(localStorage.getItem('wayss-nearby-search-'+session.user.id)||'[]'));}catch{}void db.from('nearby_preferences').select('allow_on_demand_location').eq('user_id',session.user.id).maybeSingle().then(({data}:any)=>AL(!!data?.allow_on_demand_location));},[session]);
  async function loadLivePeople(){
   if(!db||!session)return;
-  const {data:locations,error}=await db.from('nearby_live_locations').select('user_id,latitude,longitude,accuracy_m,updated_at').order('updated_at',{ascending:false});
+  const {data:locations,error}=await db.from('nearby_live_locations').select('user_id,latitude,longitude,accuracy_m,speed_mps,updated_at').order('updated_at',{ascending:false});
   if(error)return;
   const rows=locations||[];if(!rows.length){LP([]);return;}
   const ids=rows.map((x:any)=>x.user_id);
   const {data:profiles}=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);
-  LP(rows.map((x:any)=>{const p=(profiles||[]).find((v:any)=>v.id===x.user_id);return p?{id:x.user_id,username:p.username,display_name:p.display_name,avatar_url:p.avatar_url,latitude:x.latitude,longitude:x.longitude,updated_at:x.updated_at,is_self:x.user_id===session.user.id}:null;}).filter(Boolean) as NearbyPersonPoint[]);
+  LP(rows.map((x:any)=>{const p=(profiles||[]).find((v:any)=>v.id===x.user_id);return p?{id:x.user_id,username:p.username,display_name:p.display_name,avatar_url:p.avatar_url,latitude:x.latitude,longitude:x.longitude,updated_at:x.updated_at,speed_mps:x.speed_mps,is_self:x.user_id===session.user.id}:null;}).filter(Boolean) as NearbyPersonPoint[]);
  }
  useEffect(()=>{
   if(!session||!db)return;let active=true;let channel:any=null;let watch:number|null=null;
@@ -39,7 +39,8 @@ export default function NearbyPage(){
    watch=navigator.geolocation.watchPosition(async pos=>{
     if(!active)return;const now=Date.now();if(now-lastLocationPush.current<25000)return;
     lastLocationPush.current=now;
-    const {error}=await db.from('nearby_live_locations').upsert({user_id:session.user.id,latitude:pos.coords.latitude,longitude:pos.coords.longitude,accuracy_m:pos.coords.accuracy,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+    const {data:previous}=await db.from('nearby_live_locations').select('latitude,longitude,updated_at').eq('user_id',session.user.id).maybeSingle();let speed_mps:number|null=null;if(previous){const rad=(v:number)=>v*Math.PI/180,dl=rad(pos.coords.latitude-previous.latitude),dn=rad(pos.coords.longitude-previous.longitude),a=Math.sin(dl/2)**2+Math.cos(rad(previous.latitude))*Math.cos(rad(pos.coords.latitude))*Math.sin(dn/2)**2,meters=6371000*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)),seconds=(now-new Date(previous.updated_at).getTime())/1000;if(seconds>0&&seconds<600)speed_mps=Math.min(100,meters/seconds);}
+    const {error}=await db.from('nearby_live_locations').upsert({user_id:session.user.id,latitude:pos.coords.latitude,longitude:pos.coords.longitude,accuracy_m:pos.coords.accuracy,speed_mps,updated_at:new Date().toISOString()},{onConflict:'user_id'});
     if(!error){await loadLivePeople();}
    },err=>{if(active)N(err.code===1?'Live sharing is paused because location permission was denied.':'Live location is temporarily unavailable.');},{enableHighAccuracy:false,maximumAge:15000,timeout:12000});
    locationWatch.current=watch;
