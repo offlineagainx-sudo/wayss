@@ -30,9 +30,9 @@ export default function NearbyPage(){
   const start=async()=>{
    const [{data:p},{data:shares}]=await Promise.all([
     db.from('nearby_preferences').select('location_sharing_enabled,ghost_mode').eq('user_id',session.user.id).maybeSingle(),
-    db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,expires_at').or('user_a.eq.'+session.user.id+',user_b.eq.'+session.user.id)
+    db.from('nearby_location_connections').select('user_a,user_b,user_a_sharing,user_b_sharing,user_a_expires_at,user_b_expires_at').or('user_a.eq.'+session.user.id+',user_b.eq.'+session.user.id)
    ]);
-   const hasRecipient=(shares||[]).some((x:any)=>((x.user_a===session.user.id&&x.user_a_sharing)||(x.user_b===session.user.id&&x.user_b_sharing))&&(!x.expires_at||new Date(x.expires_at).getTime()>Date.now()));
+   const hasRecipient=(shares||[]).some((x:any)=>((x.user_a===session.user.id&&x.user_a_sharing&&(!x.user_a_expires_at||new Date(x.user_a_expires_at).getTime()>Date.now()))||(x.user_b===session.user.id&&x.user_b_sharing&&(!x.user_b_expires_at||new Date(x.user_b_expires_at).getTime()>Date.now()))));
    if(!active)return;
    await loadLivePeople();
    channel=db.channel('nearby-live-locations-'+session.user.id).on('postgres_changes',{event:'*',schema:'public',table:'nearby_live_locations'},()=>{void loadLivePeople();}).subscribe();
