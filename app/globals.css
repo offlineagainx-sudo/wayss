@@ -826,3 +826,5 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
  .nearby-sheet-content{max-height:calc(100dvh - 230px);padding:0 11px 12px}
  .nearby-map-actions{right:10px;top:14px}
 }
+
+.nearby-map-cluster{width:42px;height:42px;border:2px solid #f5f5f7;border-radius:50%;background:#f32950;color:#fff;font-size:13px;font-weight:750;box-shadow:0 5px 18px #0009;cursor:pointer}.nearby-map-cluster:hover{transform:scale(1.08)}
