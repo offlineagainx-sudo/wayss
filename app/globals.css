@@ -796,3 +796,33 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 .dm-voice-hold{touch-action:none;user-select:none}
 .dm-voice-hold.recording{color:#F32950;background:#F3295020;animation:dm-record-pulse 1s ease-in-out infinite}
 @keyframes dm-record-pulse{50%{transform:scale(1.08);opacity:.75}}
+
+
+/* Nearby: uncluttered map layout, with the discovery sheet clear of Quick Center */
+.nearby-search-row.nearby-search-only{display:block;padding:10px 16px;z-index:9}
+.nearby-search-row.nearby-search-only .nearby-search{width:100%;max-width:720px;margin:0 auto}
+.nearby-map-stage{height:calc(100dvh - 142px);min-height:360px}
+.nearby-sheet{bottom:96px;left:16px;width:min(430px,calc(100vw - 32px));max-height:calc(100dvh - 230px);z-index:12}
+.nearby-sheet.sheet-half{max-height:min(34dvh,310px)}
+.nearby-sheet.sheet-full{max-height:calc(100dvh - 190px)}
+.nearby-sheet-content{max-height:calc(100dvh - 300px)}
+.nearby-people-search{display:flex;gap:8px;margin:8px 0}
+.nearby-people-search input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid #30313d;border-radius:11px;background:#0b0c12;color:#f5f5f7}
+.nearby-people-search button,.nearby-people-panel .nearby-result>button{border:1px solid #f3295077;border-radius:10px;background:#f3295018;color:#f5f5f7;padding:8px 12px;font-size:11px}
+.nearby-people-hint,.nearby-requests-title{display:block;margin:7px 2px;color:#9296a3;font-size:10px}
+.nearby-requests-title{margin-top:18px;color:#f5f5f7;font-weight:650}
+.nearby-person-head{display:flex;align-items:center;gap:12px}
+.nearby-person-head img,.nearby-person-head>span{width:54px;height:54px;display:grid;place-items:center;border-radius:50%;object-fit:cover;background:#17181f}
+@media(max-width:650px){
+ .nearby-shell{min-height:100dvh;padding-bottom:0}
+ .nearby-header{height:58px;padding:0 12px}
+ .nearby-search-row.nearby-search-only{padding:8px 10px}
+ .nearby-search-row.nearby-search-only .nearby-search{width:100%}
+ .nearby-search input{height:40px}
+ .nearby-map-stage{height:calc(100dvh - 116px);min-height:400px}
+ .nearby-sheet{left:10px;bottom:calc(82px + env(safe-area-inset-bottom));width:calc(100vw - 20px);max-height:calc(100dvh - 190px);border-radius:18px}
+ .nearby-sheet.sheet-half{max-height:29dvh}
+ .nearby-sheet.sheet-full{max-height:calc(100dvh - 150px)}
+ .nearby-sheet-content{max-height:calc(100dvh - 230px);padding:0 11px 12px}
+ .nearby-map-actions{right:10px;top:14px}
+}
