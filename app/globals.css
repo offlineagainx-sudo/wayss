@@ -988,3 +988,22 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 .dm-app .dm-detail-links{gap:2px}
 .dm-app .dm-detail-links button{min-height:42px;font-size:13px;padding:10px 8px}
 }
+
+
+/* WAYSS WebRTC call overlay */
+.wayss-call-overlay{position:fixed;inset:0;z-index:1200;background:rgba(3,4,8,.82);backdrop-filter:blur(18px);display:grid;place-items:center;padding:20px}
+.wayss-call-card{width:min(420px,100%);border:1px solid #30313d;border-radius:28px;background:linear-gradient(160deg,#171821,#090a10 72%);box-shadow:0 24px 90px #000b;padding:28px 22px;color:#f5f5f7;text-align:center}
+.wayss-call-top{display:flex;align-items:center;flex-direction:column;gap:8px;padding:12px 0 22px}
+.wayss-call-top .dm-avatar{border:2px solid #f32950;box-shadow:0 0 26px #f3295040}
+.wayss-call-top h3{font-size:20px;margin:8px 0 0}
+.wayss-call-top p{margin:0;color:#9296a3;font-size:14px}
+.wayss-call-actions{display:flex;justify-content:center;gap:12px;margin:22px 0 14px}
+.wayss-call-actions button{display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 22px;font-weight:650;color:white;cursor:pointer}
+.wayss-call-accept{background:#16a765}
+.wayss-call-end{background:#f32950}
+.wayss-call-error{color:#ff879d;font-size:13px}
+.wayss-call-card>small{display:block;color:#9296a3;font-size:11px;line-height:1.5}
+.wayss-call-video{position:relative;overflow:hidden;border-radius:18px;background:#050609;aspect-ratio:4/3}
+.wayss-call-video video:first-child{width:100%;height:100%;object-fit:cover}
+.wayss-call-video video:nth-child(2){position:absolute;right:10px;bottom:10px;width:26%;aspect-ratio:3/4;object-fit:cover;border:1px solid #ffffff55;border-radius:12px;background:#101116}
+.wayss-call-video audio{display:none}
