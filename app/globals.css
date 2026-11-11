@@ -1007,3 +1007,5 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 .wayss-call-video video:first-child{width:100%;height:100%;object-fit:cover}
 .wayss-call-video video:nth-child(2){position:absolute;right:10px;bottom:10px;width:26%;aspect-ratio:3/4;object-fit:cover;border:1px solid #ffffff55;border-radius:12px;background:#101116}
 .wayss-call-video audio{display:none}
+
+.wayss-global-call-avatar{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid #f32950;box-shadow:0 0 26px #f3295040;background:#182034;display:grid;place-items:center;font-size:24px;font-weight:800}.wayss-call-tool{width:48px;height:48px;border-radius:50%;border:1px solid #3a3d4b;background:#202330;color:#fff;display:grid;place-items:center}.wayss-call-card audio{display:none}
