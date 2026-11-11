@@ -6,7 +6,7 @@ import QuickCenter from '@/components/QuickCenter';
 import DefaultAvatar from '@/components/DefaultAvatar';
 import VideoPlayer from '@/components/VideoPlayer';
 import AudioPlayer from '@/components/AudioPlayer';
-import {ArrowLeft,Send,Search,MessageCircle,Plus,Paperclip,Smile,MoreHorizontal,Reply,Copy,Trash2,Pencil,Heart,Image as ImageIcon,Video,Users,PanelRightClose,PanelRightOpen,Check,CheckCheck,X,Phone,Info,Pin,Volume2,Mic,FileText,Camera,Contact,VolumeX,Archive,Flag} from 'lucide-react';
+import {ArrowLeft,Send,Search,MessageCircle,Plus,Paperclip,Smile,MoreHorizontal,Reply,Copy,Trash2,Pencil,Heart,Image as ImageIcon,Video,Users,Check,CheckCheck,X,Phone,Info,Pin,Volume2,Mic,FileText,Camera,Contact,VolumeX,Archive,Flag} from 'lucide-react';
 const db=supabase();
 type Person={id:string;username:string;display_name:string|null;avatar_url:string|null;is_private?:boolean;role?:string};
 type Msg={id:string;conversation_id:string;sender_id:string;body:string|null;message_type?:string;created_at:string;media_url:string|null;media_type:string|null;reply_to_id?:string|null;edited_at?:string|null;deleted_at?:string|null;read_at?:string|null;message_reactions?:{user_id:string;emoji:string}[]};
