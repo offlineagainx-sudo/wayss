@@ -977,3 +977,14 @@ body:has(.dm-app.dm-chat-open) .qc-top-actions{display:none!important}
 .dm-app:not(.dm-chat-open) .dm-conversation,.dm-app:not(.dm-chat-open) .dm-details{display:none!important}
 .dm-app:not(.dm-chat-open) .dm-sidebar{width:100%;min-height:calc(100dvh - 110px)}
 @media(min-width:761px){.dm-app:not(.dm-chat-open){max-width:620px;margin:0 auto}.dm-app:not(.dm-chat-open) .dm-sidebar{min-height:calc(100dvh - 110px)}}
+
+/* HUSH chat settings bottom sheet */
+.dm-details-backdrop{display:none}
+@media(max-width:1050px){
+.dm-app .dm-details{display:flex!important;position:fixed;z-index:120;left:12px;right:12px;bottom:calc(78px + env(safe-area-inset-bottom));max-height:min(78dvh,680px);overflow:auto;flex-direction:column;padding:18px;border:1px solid #303342;border-radius:24px;background:linear-gradient(160deg,#171923 0%,#0d0f17 100%);box-shadow:0 24px 90px #000c}
+.dm-app .dm-details-backdrop{display:block;position:fixed;inset:0;z-index:119;border:0;background:#0009;backdrop-filter:blur(5px)}
+.dm-app .dm-details-head{position:sticky;top:-18px;margin:-18px -18px 0;padding:16px 18px;background:#171923ed;z-index:1;border-radius:24px 24px 0 0}
+.dm-app .dm-profile-card{padding:12px 5px 18px}
+.dm-app .dm-detail-links{gap:2px}
+.dm-app .dm-detail-links button{min-height:42px;font-size:13px;padding:10px 8px}
+}
