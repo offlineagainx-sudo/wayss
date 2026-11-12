@@ -1198,3 +1198,6 @@ html[data-theme="light"] .primary{color:#fff!important}
 .dm-media-download{cursor:pointer;font:inherit}
 .dm-media-lightbox>.dm-media-download{color:#fff;background:#f32950;border:0;border-radius:999px;padding:10px 18px;text-decoration:none;font-size:13px;font-weight:650}
 .dm-video-download-wrap>.dm-media-download{display:inline-flex;align-items:center;justify-content:center}
+
+.wayss-call-card:has(.wayss-call-video) .wayss-call-top{display:none}
+.wayss-call-card:has(.wayss-call-video) .wayss-call-video{flex:1;max-height:none;width:calc(100% + 48px);margin:-22px -24px;border-radius:0;border:0;max-width:none}
