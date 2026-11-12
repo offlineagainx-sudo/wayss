@@ -1281,3 +1281,5 @@ html[data-theme="light"] .primary{color:#fff!important}
 .story-archive-meta small{color:#9296A3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .story-archive-meta>div{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .story-archive-meta .secondary-action{font-size:11px;padding:8px 10px}
+
+.story-privacy-links{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 14px}.story-privacy-links a{color:#55AAFF;font-size:12px;text-decoration:none}.story-privacy-links a:hover{text-decoration:underline}
