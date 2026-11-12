@@ -93,6 +93,20 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    .adjust-panel{display:grid;grid-template-columns:1fr 1fr;gap:12px}.adjust-panel label{display:grid;gap:5px;font-size:10px;color:#aaa}.adjust-panel input{width:100%;accent-color:#f32950}
    .photo-filter-strip{display:flex;gap:10px;overflow-x:auto;padding:4px 0 10px;flex:0 0 auto}.photo-filter-strip button{flex:0 0 62px;background:transparent;border:0;color:#aaa;padding:0}.photo-filter-strip button>span{display:block;width:58px;height:58px;border:2px solid transparent;border-radius:50%;overflow:hidden}.photo-filter-strip button.active>span{border-color:#f32950}.photo-filter-strip img{width:100%;height:100%;object-fit:cover}.photo-filter-strip small{display:block;font-size:9px;margin-top:5px;white-space:nowrap}
    footer{display:flex;gap:10px;padding:6px 0 12px}footer button{flex:1;min-height:44px;border-radius:12px}footer .cancel{background:#17181f;color:#fff;border:1px solid #30313d}
+   @media(max-width:599px){
+    .photo-editor.story-editor{width:100%;height:100dvh;max-height:100dvh;min-height:0;overflow:hidden;gap:clamp(5px,1.1dvh,10px);padding:calc(env(safe-area-inset-top) + 4px) 12px calc(env(safe-area-inset-bottom) + 6px)}
+    .story-editor header{height:46px;flex:0 0 46px}
+    .story-editor .photo-editor-stage.story-stage{width:auto;max-width:min(100%,390px);height:auto;max-height:46dvh;aspect-ratio:9/16;flex:1 1 0;min-height:0;margin:0 auto;border-radius:12px}
+    .story-editor .gesture-hint{flex:0 0 auto;font-size:10px;line-height:1.25}
+    .story-editor .story-tools{flex:0 0 auto;padding:2px 0;gap:8px}
+    .story-editor .story-tools>button,.story-editor .story-tools>label{min-width:0}
+    .story-editor .story-tools label input{width:min(28vw,100px);max-width:100%}
+    .story-editor .adjust-panel{flex:0 0 auto;gap:8px}
+    .story-editor .photo-filter-strip{width:100%;max-width:100%;min-width:0;flex:0 0 84px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:2px 2px 8px}
+    .story-editor .photo-filter-strip button{scroll-snap-align:start;flex:0 0 58px}
+    .story-editor .photo-filter-strip button>span{width:52px;height:52px}
+    .story-editor footer{flex:0 0 auto;padding:2px 0 4px}
+   }
    @media(min-width:600px){.photo-editor{height:auto;max-height:96dvh;border:1px solid #30313d;border-radius:22px;padding:16px}.story-stage{height:min(58dvh,600px)}}
   `}</style>
  </div>;
