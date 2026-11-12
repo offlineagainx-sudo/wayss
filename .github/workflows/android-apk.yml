@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "package.json"
+      - "public/index.html"
       - "capacitor.config.ts"
       - "scripts/patch-android-permissions.mjs"
       - ".github/workflows/android-apk.yml"
