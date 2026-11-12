@@ -1078,3 +1078,28 @@ html[data-reduced-motion="true"] *,html[data-reduced-motion="true"] *::before,ht
 .wayss-verified-badge{font-size:10px;font-weight:900;background:linear-gradient(145deg,#ff5b88,#c90043);box-shadow:0 0 12px #f3295060}
 .wayss-verified-badge span{position:absolute;right:-2px;top:-4px;font-size:8px;color:#ffdce7}
 .blue-verified-badge{background:linear-gradient(145deg,#43bdff,#1769df);box-shadow:0 0 10px #168cff55}
+
+/* Functional WAYSS light appearance tokens */
+:root{--bg:#08090D;--panel:#101116;--line:#262832;--text:#F5F5F7;--muted:#9296A3;--pink:#F32950;--surface:#101116;--surface-2:#17181F}
+html[data-theme="light"]{color-scheme:light;--bg:#F4F5F9;--panel:#FFFFFF;--line:#DDE0E8;--text:#171923;--muted:#687083;--surface:#FFFFFF;--surface-2:#F0F2F7}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 8% 0%,color-mix(in srgb,var(--pink) 10%,transparent),transparent 36%),radial-gradient(ellipse at 100% 100%,#dbeafe99,transparent 35%),var(--bg);color:var(--text)}
+html[data-theme="light"] .panel,html[data-theme="light"] .settings-card,html[data-theme="light"] .settings-subhero,html[data-theme="light"] .side-panel,html[data-theme="light"] .post,html[data-theme="light"] .composer,html[data-theme="light"] .profile-editor,html[data-theme="light"] .profile-bio{background:linear-gradient(145deg,#fff,#f7f8fc);border-color:var(--line);color:var(--text)}
+html[data-theme="light"] .feature-shell,html[data-theme="light"] .feature-content,html[data-theme="light"] .app-shell{color:var(--text)}
+html[data-theme="light"] .sidebar,html[data-theme="light"] .topbar,html[data-theme="light"] .mobile-nav,html[data-theme="light"] .nav-live-pill{background:#ffffffed;border-color:var(--line);color:var(--text)}
+html[data-theme="light"] .nav-item,html[data-theme="light"] .icon-btn,html[data-theme="light"] .post-actions button{color:#596174}
+html[data-theme="light"] input:not([type="checkbox"]):not([type="range"]):not([type="color"]),html[data-theme="light"] textarea,html[data-theme="light"] select{background:#fff!important;border-color:#d7dbe5!important;color:#202432!important}
+html[data-theme="light"] .setting-row,html[data-theme="light"] .settings-field,html[data-theme="light"] .saved-post-row{color:var(--text)}
+html[data-theme="light"] .muted,html[data-theme="light"] small,html[data-theme="light"] .settings-subhero p{color:var(--muted)}
+html[data-theme="light"] .nav-style-choice,html[data-theme="light"] .verification-choice,html[data-theme="light"] .appearance-theme-choice,html[data-theme="light"] .accent-picker,html[data-theme="light"] .appearance-preview-card{background:#fff;border-color:var(--line);color:var(--text)}
+html[data-theme="light"] .nav-choice-preview{background:#f0f2f7;border-color:#dce0e9;color:#4d566a}
+html[data-theme="light"] .appearance-theme-choice.selected,html[data-theme="light"] .nav-style-choice.selected,html[data-theme="light"] .verification-choice.selected{border-color:var(--pink);box-shadow:0 0 0 1px color-mix(in srgb,var(--pink) 30%,transparent)}
+.appearance-theme-choice.selected{border-color:var(--pink)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--pink) 30%,transparent)!important}
+html[data-theme="light"] .theme-dot.dark-dot{background:linear-gradient(135deg,#08090d 50%,#202331 50%)}
+html[data-theme="light"] .theme-dot.system-dot{background:linear-gradient(135deg,#fff 50%,#e7eaf1 50%)}
+html[data-theme="light"] .brand,html[data-theme="light"] h1,html[data-theme="light"] h2,html[data-theme="light"] h3,html[data-theme="light"] .post-head b{color:var(--text)}
+.admin-own-badges{display:grid;gap:12px;margin-top:15px}
+.admin-own-badges>div{display:flex;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.admin-own-badges>div>span:nth-child(2){display:grid;gap:3px;flex:1}
+.admin-own-badges small{font-size:11px;color:var(--muted)}
+.admin-own-badges button{white-space:nowrap}
+@media(max-width:560px){.admin-own-badges>div{flex-wrap:wrap}.admin-own-badges button{margin-left:auto}}
