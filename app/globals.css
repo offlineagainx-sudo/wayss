@@ -1073,3 +1073,8 @@ html[data-reduced-motion="true"] *,html[data-reduced-motion="true"] *::before,ht
 .wayss-pull-orbit{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(145deg,#ff3b6b,#c90043);color:#fff;box-shadow:0 0 22px #f3295055}
 .wayss-pull-indicator.is-refreshing .wayss-pull-orbit svg{animation:wayss-refresh-spin .75s linear infinite}
 @keyframes wayss-refresh-spin{to{transform:rotate(360deg)}}
+
+.wayss-verified-badge,.blue-verified-badge{display:inline-grid;place-items:center;vertical-align:middle;margin-left:5px;width:19px;height:19px;border-radius:50%;color:white;position:relative;line-height:1}
+.wayss-verified-badge{font-size:10px;font-weight:900;background:linear-gradient(145deg,#ff5b88,#c90043);box-shadow:0 0 12px #f3295060}
+.wayss-verified-badge span{position:absolute;right:-2px;top:-4px;font-size:8px;color:#ffdce7}
+.blue-verified-badge{background:linear-gradient(145deg,#43bdff,#1769df);box-shadow:0 0 10px #168cff55}
