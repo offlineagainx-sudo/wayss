@@ -1201,3 +1201,19 @@ html[data-theme="light"] .primary{color:#fff!important}
 
 .wayss-call-card:has(.wayss-call-video) .wayss-call-top{display:none}
 .wayss-call-card:has(.wayss-call-video) .wayss-call-video{flex:1;max-height:none;width:calc(100% + 48px);margin:-22px -24px;border-radius:0;border:0;max-width:none}
+
+/* WAYSS follow-up fixes: Nearby search, own-location pin and caller video canvas */
+.nearby-location-empty{display:grid;justify-items:start;gap:10px}
+.nearby-location-empty .primary{display:inline-flex;align-items:center;gap:8px;border:1px solid #f3295077;background:#f32950;color:#fff;border-radius:12px;padding:10px 14px}
+.nearby-self-marker{z-index:30;width:70px;height:70px;display:grid;place-items:center;filter:drop-shadow(0 3px 8px #000b)}
+.nearby-self-marker:before{inset:8px;border:3px solid #fff;background:#168cff28;box-shadow:0 0 0 7px #168cff28,0 0 32px #168cffbb}
+.nearby-self-marker span{width:19px;height:19px;background:#168cff;border:3px solid #fff;box-shadow:0 1px 10px #000b}
+.wayss-call-card:has(.wayss-call-video){width:100vw;height:100dvh;max-width:none;max-height:none;min-height:0;border:0;border-radius:0;padding:calc(env(safe-area-inset-top) + 16px) 18px max(20px,env(safe-area-inset-bottom));justify-content:space-between}
+.wayss-call-overlay:has(.wayss-call-video){padding:0;place-items:stretch}
+.wayss-call-card:has(.wayss-call-video) .wayss-call-video{width:100%;height:auto;min-height:0;max-height:none;flex:1;margin:12px 0;border:1px solid #ffffff24;border-radius:24px;overflow:hidden}
+.wayss-call-video.is-ringing video:first-child{display:none}
+.wayss-call-video.is-ringing video:nth-child(2){position:relative;inset:auto;width:100%;height:100%;max-height:100%;aspect-ratio:auto;object-fit:cover;border:0;border-radius:22px;transform:none}
+.wayss-call-video.is-connected video:first-child{width:100%;height:100%;object-fit:cover}
+.wayss-call-video.is-connected video:nth-child(2){position:absolute;right:14px;bottom:14px;width:min(28%,150px);height:auto;aspect-ratio:3/4;object-fit:cover;border:2px solid #ffffff99;border-radius:16px}
+.wayss-call-video video{background:#050609}
+@media(max-width:650px){.wayss-call-card:has(.wayss-call-video){width:100vw;height:100dvh;padding:calc(env(safe-area-inset-top) + 16px) 14px max(18px,env(safe-area-inset-bottom))}.wayss-call-card:has(.wayss-call-video) .wayss-call-video{margin:8px 0}}
