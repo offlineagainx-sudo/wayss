@@ -1117,3 +1117,36 @@ html[data-theme="light"] .composer textarea,html[data-theme="light"] .search-wra
 html[data-theme="light"] .upload-zone b,html[data-theme="light"] .feature-content h1,html[data-theme="light"] .profile-heading h1{color:var(--text)!important}
 html[data-theme="light"] .create-tabs button{background:#fff;border-color:var(--line);color:var(--muted)}
 html[data-theme="light"] .create-tabs button.active{background:color-mix(in srgb,var(--pink) 10%,white);border-color:var(--pink);color:var(--text)}
+
+/* WAYSS Flux: native vertical, one-reel-at-a-time scrolling */
+.flux-shell{height:100dvh;min-height:0;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;padding:0!important}
+.flux-back-header{flex:0 0 54px;height:54px;display:flex;align-items:center;padding:0 14px;z-index:3;background:linear-gradient(180deg,#08090dee,#08090d00)}
+.flux-feed{flex:1 1 auto;min-height:0;height:auto!important;max-height:none;overflow-x:hidden;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;padding:0;scroll-snap-type:y mandatory;scroll-snap-stop:always;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:none}
+.flux-feed::-webkit-scrollbar{display:none}
+.flux-card{flex:0 0 100%;width:min(100%,430px);height:100%;min-height:100%;max-height:none;aspect-ratio:auto;max-width:100%;border-radius:0;border:0;scroll-snap-align:start;scroll-snap-stop:always}
+.flux-video{display:block;object-fit:cover;touch-action:pan-y}
+.flux-progress{top:8px}
+@media(max-width:650px){.flux-shell{height:100dvh}.flux-back-header{flex-basis:48px;height:48px}.flux-feed{height:auto!important}.flux-card{height:100%;min-height:100%;width:100%;border-radius:0}.flux-info{bottom:22px}.flux-actions{bottom:18px}}
+/* Profile sharing and Orbit QR scanner */
+.orbit-search-row{display:flex;gap:9px;align-items:center}
+.orbit-search-row .orbit-search{flex:1;min-width:0}
+.orbit-scan-button{width:48px;height:48px;display:grid;place-items:center;flex:0 0 48px}
+.orbit-scan-video{display:block;width:100%;max-height:360px;aspect-ratio:4/3;object-fit:cover;background:#050609;border:1px solid var(--line);border-radius:16px;margin:14px 0}
+.profile-share-modal{text-align:center;max-width:420px}
+.profile-share-qr{width:240px;height:240px;padding:10px;background:#fff;border-radius:18px;margin:16px auto;display:grid;place-items:center}
+.profile-share-qr img{width:100%;height:100%;object-fit:contain}
+.profile-share-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+.profile-share-actions button{display:flex;align-items:center;gap:8px}
+/* App-wide light theme surfaces: cover common screens, menus, forms and media panels */
+html[data-theme="light"] :is(.feature-shell,.feature-content,.app-shell,.settings-content,.profile-content,.orbit-results,.flux-comments-modal){color:var(--text)}
+html[data-theme="light"] :is(.panel,.settings-card,.settings-subhero,.side-panel,.post,.composer,.profile-editor,.profile-bio,.custom-section,.orbit-person,.modal-card,.auth-card,.search-results,.profile-menu,.qc-more-menu,.quick-center-menu,.nearby-sheet,.nearby-panel,.nearby-card,.chat-panel,.conversation-panel,.message-list,.message-composer,.settings-notice,.empty){background:#fff!important;border-color:var(--line)!important;color:var(--text)!important}
+html[data-theme="light"] :is(.feature-top,.topbar,.sidebar,.mobile-nav,.nav-live-pill,.qc-root,.qc-classic){background:#fffffff2!important;border-color:var(--line)!important;color:var(--text)!important}
+html[data-theme="light"] :is(.feature-top button,.nav-item,.qc-item,.icon-btn,.secondary-action,.profile-stats button,.profile-connection-row,.flux-comment-tools button){color:#40485b}
+html[data-theme="light"] :is(input:not([type=checkbox]):not([type=range]):not([type=color]),textarea,select){background:#fff!important;color:#171923!important;border-color:#d6dbe5!important}
+html[data-theme="light"] :is(h1,h2,h3,h4,b,strong,label,.profile-heading h1,.post-head b,.orbit-person-info b,.feature-content h1){color:var(--text)}
+html[data-theme="light"] :is(p,small,.muted,.eyebrow,.profile-heading p,.profile-heading small,.setting-row small){color:var(--muted)}
+html[data-theme="light"] :is(.profile-cover,.flux-card,.flux-video,.orbit-scan-video){color:white}
+html[data-theme="light"] .flux-shell{background:#f4f5f9}
+html[data-theme="light"] .flux-back-header{background:linear-gradient(180deg,#f4f5f9ee,#f4f5f900)}
+html[data-theme="light"] .qc-root{box-shadow:0 8px 30px #12182a18}
+html[data-theme="light"] .primary{color:#fff!important}
