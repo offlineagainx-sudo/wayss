@@ -1103,3 +1103,9 @@ html[data-theme="light"] .brand,html[data-theme="light"] h1,html[data-theme="lig
 .admin-own-badges small{font-size:11px;color:var(--muted)}
 .admin-own-badges button{white-space:nowrap}
 @media(max-width:560px){.admin-own-badges>div{flex-wrap:wrap}.admin-own-badges button{margin-left:auto}}
+
+/* Route shared accent treatments through the selected WAYSS colour */
+.primary,.follow-mini,.appearance-preview-card button{background:var(--pink)!important}
+.brand span,.eyebrow,.post-actions .liked,.nav-item.active svg,.settings-category-icon,.settings-card h3 svg,.feature-top .icon-btn:hover{color:var(--pink)!important}
+.nav-item.active{box-shadow:inset 3px 0 var(--pink)!important;background:color-mix(in srgb,var(--pink) 12%,transparent)!important}
+.auth-form input:focus,.settings-field input:focus,.settings-field textarea:focus,.settings-field select:focus{border-color:var(--pink)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--pink) 15%,transparent)}
