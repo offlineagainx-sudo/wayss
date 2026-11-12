@@ -2,6 +2,13 @@ name: Build WAYSS Android APK
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "package.json"
+      - "capacitor.config.ts"
+      - "scripts/patch-android-permissions.mjs"
+      - "app/settings/[section]/page.tsx"
+      - ".github/workflows/build-android-apk.yml"
 
 permissions:
   contents: read
@@ -26,7 +33,7 @@ jobs:
           java-version: '21'
 
       - name: Install Capacitor and icon tooling
-        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7 sharp
+        run: npm install --no-save @capacitor/cli@7 @capacitor/core@7 @capacitor/android@7 @capacitor/local-notifications@7 sharp
 
       - name: Generate Android project
         run: npx cap add android
@@ -59,6 +66,20 @@ jobs:
 
       - name: Prepare Capacitor Android assets directory
         run: mkdir -p android/app/src/main/assets/public
+
+      - name: Apply Android runtime permissions
+        run: node scripts/patch-android-permissions.mjs
+
+      - name: Set Android version for update
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("android/app/build.gradle")
+          s = p.read_text()
+          s = s.replace("versionCode 1", "versionCode 2")
+          s = s.replace('versionName "1.0"', 'versionName "1.0.1"')
+          p.write_text(s)
+          PY
 
       - name: Sync Android project
         run: npx cap sync android
