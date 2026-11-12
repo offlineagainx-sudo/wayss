@@ -17,7 +17,7 @@ const permissions = [
 
 for (const permission of permissions) {
   const escaped = permission.replaceAll('.', '\\.');
-  if (!new RegExp('<uses-permission[^>]+android:name=["\\']' + escaped + '["\\']').test(manifest)) {
+  if (!new RegExp(`<uses-permission[^>]+android:name=["']${escaped}["']`).test(manifest)) {
     manifest = manifest.replace('</manifest>', `    <uses-permission android:name="${permission}" />\n</manifest>`);
   }
 }
@@ -29,7 +29,7 @@ const features = [
 ];
 for (const feature of features) {
   const escaped = feature.replaceAll('.', '\\.');
-  if (!new RegExp('<uses-feature[^>]+android:name=["\\']' + escaped + '["\\']').test(manifest)) {
+  if (!new RegExp(`<uses-feature[^>]+android:name=["']${escaped}["']`).test(manifest)) {
     manifest = manifest.replace('</manifest>', `    <uses-feature android:name="${feature}" android:required="false" />\n</manifest>`);
   }
 }
