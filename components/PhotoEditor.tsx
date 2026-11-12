@@ -96,7 +96,7 @@ export default function PhotoEditor({file,mode,onCancel,onApply}:Props){
    @media(max-width:599px){
     .photo-editor.story-editor{width:100%;height:100dvh;max-height:100dvh;min-height:0;overflow:hidden;gap:clamp(5px,1.1dvh,10px);padding:calc(env(safe-area-inset-top) + 4px) 12px calc(env(safe-area-inset-bottom) + 6px)}
     .story-editor header{height:46px;flex:0 0 46px}
-    .story-editor .photo-editor-stage.story-stage{width:auto;max-width:min(100%,390px);height:auto;max-height:46dvh;aspect-ratio:9/16;flex:1 1 0;min-height:0;margin:0 auto;border-radius:12px}
+    .story-editor .photo-editor-stage.story-stage{width:min(100%,390px,calc(46dvh * 9 / 16));max-width:100%;height:auto;max-height:46dvh;aspect-ratio:9/16;flex:0 1 auto;min-height:0;margin:0 auto;border-radius:12px}
     .story-editor .gesture-hint{flex:0 0 auto;font-size:10px;line-height:1.25}
     .story-editor .story-tools{flex:0 0 auto;padding:2px 0;gap:8px}
     .story-editor .story-tools>button,.story-editor .story-tools>label{min-width:0}
