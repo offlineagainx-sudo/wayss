@@ -88,38 +88,38 @@ export default function PhantomStudio(){
   if(paths.length)await db.storage.from('phantom-media').remove(paths);
   P(null);C(null);ED(false);N('Your PHANTOM identity has been deleted.');B(false);
  }
- if(!db)return <main className="setup">Connect Supabase first.</main>;
+ if(!db)return <main className="setup">Couldn't load PHANTOM. Try again in a moment.</main>;
  if(!session)return <main className="setup"><h2>Sign in to create your PHANTOM</h2><button className="primary" onClick={()=>router.push('/')}>Go to WAYSS</button></main>;
  if(!loaded)return <main className="setup">Loading PHANTOM…</main>;
  return <main className="feature-shell">
   <header className="feature-top"><button className="icon-btn" onClick={()=>router.push('/')}><ArrowLeft/></button><div><b>PHANTOM</b><small>Your second profile</small></div><span className="phantom-mark">PRIVATE</span></header>
   <section className="feature-content phantom-studio">
-   {profile&&!editing?<><p className="eyebrow">YOUR SECOND IDENTITY</p><h1>My Phantom.</h1><section className="panel settings-card"><h3><ShieldCheck size={18}/> @{profile.username}</h3><p className="muted">{profile.display_name||profile.username} · {profile.enabled?"Visible to challengers":"Hidden from challengers"}</p><p className="muted">{profile.bio||"No Phantom bio yet."}</p><div className="phantom-manage-actions"><button className="primary" onClick={()=>ED(true)}><Save size={15}/> Edit PHANTOM</button><button className="secondary-action" disabled={busy} onClick={()=>void deletePhantom()}><Lock size={15}/> Delete PHANTOM</button><button className="secondary-action" onClick={()=>router.push("/phantom/profile/"+session.user.id)}><Eye size={15}/> View my PHANTOM profile</button></div></section>{notice&&<p className="notice">{notice}</p>}</>:<>
-   <p className="eyebrow">TWO IDENTITIES. ONE MYSTERY.</p>
+   {profile&&!editing?<><p className="eyebrow">PRIVATE PROFILE</p><h1>My Phantom.</h1><section className="panel settings-card"><h3><ShieldCheck size={18}/> @{profile.username}</h3><p className="muted">{profile.display_name||profile.username} · {profile.enabled?"Visible to challengers":"Hidden from challengers"}</p><p className="muted">{profile.bio||"No Phantom bio yet."}</p><div className="phantom-manage-actions"><button className="primary" onClick={()=>ED(true)}><Save size={15}/> Edit PHANTOM</button><button className="secondary-action" disabled={busy} onClick={()=>void deletePhantom()}><Lock size={15}/> Delete PHANTOM</button><button className="secondary-action" onClick={()=>router.push("/phantom/profile/"+session.user.id)}><Eye size={15}/> View my PHANTOM profile</button></div></section>{notice&&<p className="notice">{notice}</p>}</>:<>
+   <p className="eyebrow">YOUR PHANTOM PROFILE</p>
    <h1>{profile?'Edit your Phantom.':'Create your Phantom.'}</h1>
-   <p className="muted">Set it up just like a profile. Others need your code or the answer to your puzzle before they can see it.</p>
+   <p className="muted">Add your details, then choose a puzzle or access code. People can view your profile after they pass the challenge.</p>
    <section className="panel settings-card">
     <h3><ShieldCheck size={18}/> Profile details</h3>
     <label>Phantom username<input id="phantom-username" defaultValue={profile?.username||''} placeholder="your_hidden_name" maxLength={24}/></label>
     <label>Display name<input id="phantom-display" defaultValue={profile?.display_name||''} placeholder="Display name" maxLength={50}/></label>
     <label>Bio<textarea id="phantom-bio" defaultValue={profile?.bio||''} placeholder="A little about this identity…" maxLength={300}/></label>
     <div className="phantom-form-grid"><label><ImagePlus size={15}/> Profile photo<input id="phantom-avatar-file" type="file" accept="image/jpeg,image/png,image/webp"/></label><label><ImagePlus size={15}/> Cover photo<input id="phantom-cover-file" type="file" accept="image/jpeg,image/png,image/webp"/></label></div>
-    <label className="setting-row"><span><b>Show my Phantom to challengers</b><small>Turn this off whenever you want to hide it.</small></span><input id="phantom-enabled" type="checkbox" defaultChecked={profile?.enabled??true}/></label>
+    <label className="setting-row"><span><b>Show my Phantom to challengers</b><small>Turn this off to hide your PHANTOM profile.</small></span><input id="phantom-enabled" type="checkbox" defaultChecked={profile?.enabled??true}/></label>
    </section>
    <section className="panel settings-card">
     <h3><Lock size={18}/> How should people unlock it?</h3>
     <div className="phantom-mode-picker">
-     <button type="button" className={mode==='puzzle'?'active':''} onClick={()=>M('puzzle')}><ShieldCheck size={17}/><b>Puzzle</b><small>Give them a clue and a correct answer.</small></button>
-     <button type="button" className={mode==='code'?'active':''} onClick={()=>M('code')}><KeyRound size={17}/><b>Access code</b><small>Only people who know your code can enter.</small></button>
+     <button type="button" className={mode==='puzzle'?'active':''} onClick={()=>M('puzzle')}><ShieldCheck size={17}/><b>Puzzle</b><small>Add a clue and set the correct answer.</small></button>
+     <button type="button" className={mode==='code'?'active':''} onClick={()=>M('code')}><KeyRound size={17}/><b>Access code</b><small>Only people with the code can view your profile.</small></button>
     </div>
-    {mode==='puzzle'?<label>Your clue<textarea value={clue} onChange={e=>Q(e.target.value)} maxLength={1000} placeholder="Write one short riddle or clue…"/></label>:<p className="muted">Choose a code that you can share with the people you want to let in.</p>}
+    {mode==='puzzle'?<label>Your clue<textarea value={clue} onChange={e=>Q(e.target.value)} maxLength={1000} placeholder="Write one short riddle or clue…"/></label>:<p className="muted">Set a code and share it with anyone you want to give access to.</p>}
     <label>{mode==='code'?'Your access code':'Correct answer'}<input type="password" value={answer} onChange={e=>A(e.target.value)} maxLength={120} autoComplete="new-password" placeholder={mode==='code'?'Set your private code':'The answer to your clue'}/></label>
     <label>Hint (optional)<input value={hint} onChange={e=>H(e.target.value)} maxLength={500} placeholder="A small hint to help them…"/></label>
-    <p className="muted">Your answer/code stays private and is checked securely. People get up to 8 tries.</p>
+    <p className="muted">Your answer or code stays private. Each person gets up to 8 attempts.</p>
    </section>
    <button className="primary full" disabled={busy} onClick={()=>void save()}><Save size={16}/>{busy?'Saving…':'Save PHANTOM'}</button>
    {profile&&<button className="secondary-action full" onClick={()=>router.push('/phantom/profile/'+session.user.id)}><Eye size={16}/> View my Phantom profile</button>}
-   {challenge?.is_published&&<p className="notice">Your Phantom is published.</p>}
+   {challenge?.is_published&&<p className="notice">PHANTOM profile saved.</p>}
    {profile&&editing&&<button className="secondary-action full" onClick={()=>ED(false)}>Cancel editing</button>}
    {notice&&<p className="notice">{notice}</p>}</>}
   </section><QuickCenter/>
