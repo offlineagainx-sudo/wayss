@@ -9,8 +9,14 @@ export function supabase(): any {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
   if (!instance) {
+    const defaultStorageKey = `sb-${new URL(url).hostname.split('.')[0]}-auth-token`;
+    let storageKey = defaultStorageKey;
+    if (typeof window !== 'undefined') {
+      try { storageKey = window.localStorage.getItem('wayss-active-auth-key') || defaultStorageKey; } catch {}
+    }
     instance = createClient(url, key, {
       auth: {
+        storageKey,
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
